@@ -1,17 +1,48 @@
-
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import commonStyles from "../theme/styles";
+import Moment from 'moment';
 
 const LocationItem = ({ location }) => {
 
+    const toDateFormat = React.useCallback((dt) => Moment(dt).format('DD MMMM'))
+
     return (
-        <View>
-            <View>
-                <Text>{location.materiel.nom}</Text>
-                <Text>{location.client["prenom"]} {location.client["nom"]}</Text>
+        <View style={componentStyles.container}>
+            <View style={componentStyles.main}>
+                <Text style={componentStyles.title}>{location.materiel.nom}</Text>
+                <Text style={componentStyles.subtitle}>Louer par {location.client.prenom} {location.client.nom}</Text>
             </View>
             <View>
-                <Text>{location.materiel.jourDebut}</Text>
-                <Text>{location.materiel.jourFin}</Text>
+                <Text>du {toDateFormat(location.jourDebut)}</Text>
+                <Text>au {toDateFormat(location.jourFin)}</Text>
             </View>
         </View>
     )
 }
+
+
+const componentStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 10,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    main: {
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 0
+    },
+    subtitle: {
+        fontSize: 14,
+        fontWeight: "bold",
+        color: '#666'
+    }
+});
+  
+
+export default LocationItem;

@@ -1,8 +1,11 @@
 import { StyleSheet } from "react-native";
 
 // Common styles
-const styles = StyleSheet.create({
+const commonStyles = StyleSheet.create({
   container: { flex: 1, alignItems: "center", justifyContent: "center" },
+  h1: { fontSize: 28, paddingBottom: 10 },
+  h2: { fontSize: 24, paddingBottom: 10 },
+  h3: { fontSize: 20, paddingBottom: 10 },
   text: { fontSize: 18, paddingBottom: 10 },
 });
 
@@ -17,4 +20,4 @@ export const screenOptions = {
   },
 };
 
-export default styles;
+export default commonStyles;

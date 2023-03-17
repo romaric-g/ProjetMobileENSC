@@ -1,15 +1,20 @@
-const rootEndpoint = "https://localhost:5128/api";
+import clientService from "../api/clientService";
+
+const rootEndpoint = "https://ensc321.azurewebsites.net/api";
 
 // Model class for a cocktail
 export class Location {
-  constructor(id, jourDebut, jourFin, materielId, clientId, materiel=null, client=null) {
+  constructor({
+    id, jourDebut, jourFin, materielId, clientId, materiel={}, client={}
+  }) {
     this.id = id;
     this.jourDebut = jourDebut;
     this.jourFin = jourFin;
-    this.materielId = materielId
-    this.clientId = clientId
+    this.materielId = materielId;
+    this.clientId = clientId;
+
+    this.client = clientService.createCient(client)
     this.materiel = materiel;
-    this.client = client
   }
 }
 
@@ -18,6 +23,9 @@ class LocationService {
     const locations = await this.fetchFromApi(
       `${rootEndpoint}/LocationApi`
     );
+
+    if (locations == null) throw Error("Impossible de recuperer la liste des elements depuis l'API")
+
     return this.createLocations(locations);
   }
 
@@ -33,29 +41,32 @@ class LocationService {
     try {
       const response = await fetch(query);
       // FIXME: JSON parse error when ingredient is not found
-      const content = await response.json();
-      return content.drinks;
+      const json = await response.json();
+      console.log("json", json)
+      return json;
     } catch (e) {
-      console.error(e);
+      console.log("error on fetching", e)
     }
   }
 
   // Create a Cocktail model object from a subset of data fields returned by API
   createLocation(location) {
-    return new Location(
-      location.id,
-      location.jourDebut,
-      location.jourFin,
-      location.materielId,
-      location.materiel,
-      location.client
-    );
+    return new Location({
+      id: location.id, 
+      jourDebut: location.jourDebut,  
+      jourFin: location.jourFin,  
+      materielId: location.materielId,  
+      clientId: location.clientId,  
+      materiel: location.client,  
+      client: location.client, 
+    });
   }
 
   // Create a Cocktail model object list from the array returned by API
   createLocations(locations) {
-    // Create a cocktail object for each element in the array
-    return locations.map((location) => this.createLocation(location));
+    return locations.map((location) => {
+      return this.createLocation(location)
+    })
   }
 }
 
