@@ -1,53 +1,60 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { SectionList, FlatList, StyleSheet } from "react-native";
 import { Text, View, Button } from "react-native";
 import commonStyles from "../theme/styles";
 import locationService from "../api/locationService";
-import { Logs } from 'expo'
+import { Logs } from "expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocationItem from "../components/LocationItem";
+import { TouchableOpacity } from "react-native";
 
 const LocationScreen = ({ navigation }) => {
+  Logs.enableExpoCliLogging();
 
-  Logs.enableExpoCliLogging()
-
-  const [locations, setLocations] = React.useState([])
+  const [locations, setLocations] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
   const loadLocations = React.useCallback(async () => {
     try {
-      const locations = await locationService.fetchAllLocations()
-      setLocations(locations)
+      const locations = await locationService.fetchAllLocations();
+      setLocations(locations);
     } catch (error) {
-      setError(true)
+      setError(true);
     }
-    setLoading(false)
-  })
-
+    setLoading(false);
+  });
 
   React.useEffect(() => {
-
-    loadLocations()
-
-  }, [])
+    loadLocations();
+  }, []);
 
   if (loading) {
-    return <Text>Chargement des locations</Text>
+    return <Text>Chargement des locations</Text>;
   }
 
   if (error) {
-    return <Text>Erreur lors du chargement des ressources</Text>
+    return <Text>Erreur lors du chargement des ressources</Text>;
   }
 
   return (
-    <SafeAreaView style={screenStyles.container}>
+    <View style={screenStyles.container}>
       <FlatList
         data={locations}
-        renderItem={({item}) => <LocationItem location={item} />}
-        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Details", {
+                location: item,
+              });
+            }}
+          >
+            <LocationItem location={item} />
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
