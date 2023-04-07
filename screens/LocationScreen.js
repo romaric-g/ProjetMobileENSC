@@ -44,7 +44,7 @@ const LocationScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Details", {
+              navigation.navigate("DetailsLocation", {
                 location: item,
               });
             }}

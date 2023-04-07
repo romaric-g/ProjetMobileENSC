@@ -5,8 +5,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LocationStackNavigator from "./LocationStackNavigator";
 import ClientsStackNavigator from "./ClientsStackNavigator";
+import MaterialStackNavigator from "./MaterialStackNavigator";
 
 const Tab = createBottomTabNavigator();
+
+const LOCATION_STACK = "Locations en cours"
+const MATERIAL_STACK = "Materiels"
+const CLIENT_STACK = "Clients"
 
 const RootTabNavigator = () => {
   return (
@@ -17,11 +22,13 @@ const RootTabNavigator = () => {
           // Icons will be different if the tab is focused
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-            if (route.name === "LocationsStack") {
+            if (route.name === LOCATION_STACK) {
               iconName = focused
                 ? "ios-information-circle"
                 : "ios-information-circle-outline";
-            } else if (route.name === "ClientsStack") {
+            } else if (route.name === MATERIAL_STACK) {
+              iconName = focused ? "pricetag" : "pricetag-outline";
+            } else if (route.name === CLIENT_STACK) {
               iconName = focused ? "ios-list" : "ios-list-outline";
             }
             // You can return any component that you like here!
@@ -33,8 +40,9 @@ const RootTabNavigator = () => {
           headerShown: false,
         })}
       >
-        <Tab.Screen name="LocationsStack" component={LocationStackNavigator} />
-        <Tab.Screen name="ClientsStack" component={ClientsStackNavigator} />
+        <Tab.Screen name={LOCATION_STACK} component={LocationStackNavigator} />
+        <Tab.Screen name={MATERIAL_STACK} component={MaterialStackNavigator} />
+        <Tab.Screen name={CLIENT_STACK} component={ClientsStackNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
   );

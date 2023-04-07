@@ -1,30 +1,30 @@
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LocationScreen from "../screens/LocationScreen";
-import LocationDetailsScreen from "../screens/LocationDetailsScreen";
+import MaterialScreen from "../screens/MaterialScreen";
+import MaterialDetailsScreen from "../screens/MaterialDetailsScreen";
 import { screenOptions } from "../theme/styles";
 import { Button, TouchableOpacity } from "react-native";
-import LocationCreateScreen from "../screens/LocationCreateScreen";
+import MaterialCreateScreen from "../screens/MaterialCreateScreen";
 
 // Screen stack for home tab
-const LocationStack = createNativeStackNavigator();
+const MaterialStack = createNativeStackNavigator();
 
-const LocationStackNavigator = ({ navigation }) => {
+const MaterialStackNavigator = ({ navigation }) => {
   return (
-    <LocationStack.Navigator
-      initialRouteName="Locations"
+    <MaterialStack.Navigator
+      initialRouteName="Materials"
       screenOptions={screenOptions}
     >
-      <LocationStack.Screen
-        name="LocationsList"
-        component={LocationScreen}
+      <MaterialStack.Screen
+        name="Materials"
+        component={MaterialScreen}
         options={{
-          title: "LocationsList",
+          title: "Materials",
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("CreateLocation");
+                navigation.navigate("CreateMaterial");
               }}
             >
               <Ionicons name="add" size={32} color="#fff" />
@@ -32,10 +32,10 @@ const LocationStackNavigator = ({ navigation }) => {
           ),
         }}
       />
-      <LocationStack.Screen name="CreateLocation" component={LocationCreateScreen} />
-      <LocationStack.Screen
-        name="DetailsLocation"
-        component={LocationDetailsScreen}
+      <MaterialStack.Screen name="CreateMaterial" component={MaterialCreateScreen} />
+      <MaterialStack.Screen
+        name="DetailsMaterial"
+        component={MaterialDetailsScreen}
         options={{
           headerRight: () => (
             <TouchableOpacity onPress={() => alert("This is a button!")}>
@@ -44,8 +44,8 @@ const LocationStackNavigator = ({ navigation }) => {
           ),
         }}
       />
-    </LocationStack.Navigator>
+    </MaterialStack.Navigator>
   );
 };
 
-export default LocationStackNavigator;
+export default MaterialStackNavigator;
