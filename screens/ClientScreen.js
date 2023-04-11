@@ -1,6 +1,5 @@
 import React from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
-import { Text, View } from "react-native";
+import { Text, View, FlatList, RefreshControl, StyleSheet, TouchableOpacity } from "react-native";
 import { Logs } from "expo";
 import clientService from "../api/clientService";
 

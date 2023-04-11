@@ -32,7 +32,7 @@ const componentStyles = StyleSheet.create({
   },
   main: {},
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     margin: 0,
   },

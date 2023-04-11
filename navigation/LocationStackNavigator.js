@@ -32,7 +32,10 @@ const LocationStackNavigator = ({ navigation }) => {
           ),
         }}
       />
-      <LocationStack.Screen name="CreateLocation" component={LocationCreateScreen} />
+      <LocationStack.Screen
+        name="CreateLocation"
+        component={LocationCreateScreen}
+      />
       <LocationStack.Screen
         name="DetailsLocation"
         component={LocationDetailsScreen}

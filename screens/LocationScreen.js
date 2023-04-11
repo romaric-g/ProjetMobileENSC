@@ -1,12 +1,8 @@
-import React from "react";
-import { SectionList, FlatList, StyleSheet } from "react-native";
-import { Text, View, Button } from "react-native";
-import commonStyles from "../theme/styles";
-import locationService from "../api/locationService";
 import { Logs } from "expo";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import locationService from "../api/locationService";
 import LocationItem from "../components/LocationItem";
-import { TouchableOpacity } from "react-native";
 
 const LocationScreen = ({ navigation }) => {
   Logs.enableExpoCliLogging();
@@ -20,14 +16,19 @@ const LocationScreen = ({ navigation }) => {
       const locations = await locationService.fetchAllLocations();
       setLocations(locations);
     } catch (error) {
+      console.log("error ee", error)
       setError(true);
     }
     setLoading(false);
-  });
+  }, [setLocations]);
 
   React.useEffect(() => {
     loadLocations();
   }, []);
+
+
+
+  
 
   if (loading) {
     return <Text>Chargement des locations</Text>;

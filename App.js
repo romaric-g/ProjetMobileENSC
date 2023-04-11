@@ -1,10 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import RootTabNavigator from "./navigation/RootTabNavigator";
+import TabNavigator from "./navigation/TabNavigator";
 
 export default function App() {
-  return <RootTabNavigator />
+  return <TabNavigator />;
 }
 
 const styles = StyleSheet.create({

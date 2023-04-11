@@ -9,10 +9,9 @@ import { View } from "react-native";
 import { Logs } from "expo";
 import "moment/locale/fr";
 import commonStyles from "../theme/styles";
-import materialService, { Material } from "../api/materialService";
 
 
-const LocationCreateScreen = ({ navigation }) => {
+const ClientCreateScreen = ({ navigation }) => {
   Logs.enableExpoCliLogging();
 
   const [name, setName] = React.useState()
@@ -21,19 +20,19 @@ const LocationCreateScreen = ({ navigation }) => {
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState(false)
 
-  const handleCreateMaterial = React.useCallback(async () => {
-    material = new Material({
+  const handleCreateClient = React.useCallback(async () => {
+    material = new Client({
       nom: name,
       prixParJour: Number(price)
     })
     console.log("material", material)
     setLoading(true)
     try {
-      const newMaterial = await materialService.createMaterial(material)
+      const newClient = await materialService.createClient(material)
       
       navigation.navigate({
-        name: "Materials",
-        params: { material: materialService.toMaterial(newMaterial) },
+        name: "Clients",
+        params: { material: materialService.toClient(newClient) },
         merge: true,
       })
 
@@ -64,7 +63,7 @@ const LocationCreateScreen = ({ navigation }) => {
         keyboardType="numeric"
       />
       <View>
-        <Button title="Enregister" onPress={handleCreateMaterial}/>
+        <Button title="Enregister" onPress={handleCreateClient}/>
       </View>
     </View>
   );
@@ -83,4 +82,4 @@ const screenStyles = StyleSheet.create({
   }
 });
 
-export default LocationCreateScreen;
+export default ClientCreateScreen;

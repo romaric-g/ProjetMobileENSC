@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialScreen from "../screens/MaterialScreen";
 import MaterialDetailsScreen from "../screens/MaterialDetailsScreen";
 import { screenOptions } from "../theme/styles";
-import { Button, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import MaterialCreateScreen from "../screens/MaterialCreateScreen";
 
 // Screen stack for home tab
@@ -32,7 +32,10 @@ const MaterialStackNavigator = ({ navigation }) => {
           ),
         }}
       />
-      <MaterialStack.Screen name="CreateMaterial" component={MaterialCreateScreen} />
+      <MaterialStack.Screen
+        name="CreateMaterial"
+        component={MaterialCreateScreen}
+      />
       <MaterialStack.Screen
         name="DetailsMaterial"
         component={MaterialDetailsScreen}

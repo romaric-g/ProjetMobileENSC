@@ -1,9 +1,11 @@
 import React from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { screenOptions } from "../theme/styles";
 import ClientCreateScreen from "../screens/ClientCreateScreen";
 import ClientDetailsScreen from "../screens/ClientDetailsScreen";
 import ClientScreen from "../screens/ClientScreen";
+import { TouchableOpacity } from "react-native";
 
 // Screen stack for settings tab
 const ClientsStack = createNativeStackNavigator();

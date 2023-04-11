@@ -1,17 +1,11 @@
-import React from "react";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from "react-native";
-import { View } from "react-native";
 import { Logs } from "expo";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SelecteurPeriode from "../components/SelecteurPeriode";
-import moment from "moment/moment";
 import "moment/locale/fr";
+import moment from "moment/moment";
+import React from "react";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import locationService from "../api/locationService";
+import SelecteurPeriode from "../components/SelecteurPeriode";
+import SelectSearch from "../components/SelectSearch";
 moment.locale("fr");
 
 const LocationCreateScreen = () => {
@@ -55,7 +49,7 @@ const LocationCreateScreen = () => {
         periode={periode}
         setPeriode={setPeriode}
       />
-      <TouchableOpacity style={{ flex: 0 }}>
+      {/* <TouchableOpacity style={{ flex: 0 }}>
         <View
           style={{
             paddingHorizontal: 10,
@@ -68,7 +62,17 @@ const LocationCreateScreen = () => {
           <Text style={{ fontWeight: "bold" }}>Locataire</Text>
           <Text style={{ fontSize: 16 }}>Romaric Gauzi</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <SelectSearch
+        label="Locataire"
+        fetchData={async () => {
+          return await locationService.fetchAllLocations();
+        }}
+        listItemBuilder={(data) => {
+          return <Text>Result</Text>;
+        }}
+        selectTextBuilder={(data) => "result"}
+      />
       <TouchableOpacity style={{ flex: 0 }}>
         <View
           style={{

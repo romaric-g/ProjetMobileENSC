@@ -7,17 +7,17 @@ import LocationStackNavigator from "./LocationStackNavigator";
 import ClientsStackNavigator from "./ClientsStackNavigator";
 import MaterialStackNavigator from "./MaterialStackNavigator";
 
-const Tab = createBottomTabNavigator();
+const TabStack = createBottomTabNavigator();
 
-const LOCATION_STACK = "Locations en cours"
-const MATERIAL_STACK = "Materiels"
-const CLIENT_STACK = "Clients"
+const LOCATION_STACK = "Locations en cours";
+const MATERIAL_STACK = "Materiels";
+const CLIENT_STACK = "Clients";
 
-const RootTabNavigator = () => {
+const TabNavigator = () => {
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#f4511e" />
-      <Tab.Navigator
+      <TabStack.Navigator
         screenOptions={({ route }) => ({
           // Icons will be different if the tab is focused
           tabBarIcon: ({ focused, color, size }) => {
@@ -31,7 +31,6 @@ const RootTabNavigator = () => {
             } else if (route.name === CLIENT_STACK) {
               iconName = focused ? "ios-list" : "ios-list-outline";
             }
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
           tabBarActiveTintColor: "tomato",
@@ -40,12 +39,21 @@ const RootTabNavigator = () => {
           headerShown: false,
         })}
       >
-        <Tab.Screen name={LOCATION_STACK} component={LocationStackNavigator} />
-        <Tab.Screen name={MATERIAL_STACK} component={MaterialStackNavigator} />
-        <Tab.Screen name={CLIENT_STACK} component={ClientsStackNavigator} />
-      </Tab.Navigator>
+        <TabStack.Screen
+          name={LOCATION_STACK}
+          component={LocationStackNavigator}
+        />
+        <TabStack.Screen
+          name={MATERIAL_STACK}
+          component={MaterialStackNavigator}
+        />
+        <TabStack.Screen
+          name={CLIENT_STACK}
+          component={ClientsStackNavigator}
+        />
+      </TabStack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default RootTabNavigator;
+export default TabNavigator;
