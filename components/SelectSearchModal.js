@@ -47,8 +47,9 @@ const SelectSearchModal = (props) => {
     if (!searchText || !data) return data;
 
     return data.filter((item) => {
-      let text = toText({ item });
-      if (text.indexOf(searchText) >= 0) return true;
+      let text = toText({ item }).toLowerCase();
+      let search = searchText.toLowerCase();
+      if (text.indexOf(search) >= 0) return true;
       return false;
     });
   }, [data, searchText]);
