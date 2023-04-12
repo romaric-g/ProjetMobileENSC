@@ -15,25 +15,19 @@ moment.locale("fr");
 
 const SelectSearch = ({
   label,
+  value,
   fetchData,
-  renderItem,
+  toText,
   keyExtractor,
-  selectTextBuilder,
   onSelect,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [selectedData, setSelectedData] = React.useState();
-
-  const selectedItemText = React.useMemo(() => {
-    if (!selectedData) {
-      return "-";
-    }
-    return selectTextBuilder(selectedData);
-  }, [selectedData, selectTextBuilder]);
 
   const handleCloseModal = React.useCallback(() => {
     setModalVisible(false);
   }, [setModalVisible]);
+
+  console.log("value", value);
 
   return (
     <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -47,7 +41,7 @@ const SelectSearch = ({
         }}
       >
         <Text style={{ fontWeight: "bold" }}>{label}</Text>
-        <Text style={{ fontSize: 16 }}>{selectedItemText}</Text>
+        <Text style={{ fontSize: 16 }}>{value}</Text>
       </View>
       <Modal
         animationType="slide"
@@ -62,9 +56,8 @@ const SelectSearch = ({
             <SelectSearchModal
               label={label}
               fetchData={fetchData}
-              renderItem={renderItem}
+              toText={toText}
               keyExtractor={keyExtractor}
-              selectTextBuilder={selectTextBuilder}
               closeModal={handleCloseModal}
               onSelect={onSelect}
             />

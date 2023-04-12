@@ -2,46 +2,79 @@ import { Logs } from "expo";
 import "moment/locale/fr";
 import moment from "moment/moment";
 import React from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import locationService from "../api/locationService";
+import { StyleSheet, View } from "react-native";
 import SelecteurPeriode from "../components/SelecteurPeriode";
-import SelectSearch from "../components/SelectSearch";
+import ClientSelect from "./LocationCreateScreen/ClientSelect.js";
+import MaterialSelect from "./LocationCreateScreen/MaterialSelect.js";
+import RecapSection from "./LocationCreateScreen/RecapSection.js";
+import locationService from "../api/locationService";
+import materialService from "../api/materialService";
+
 moment.locale("fr");
 
-var i = 1;
-const LocationCreateScreen = () => {
+const LocationCreateScreen = ({ navigation }) => {
   Logs.enableExpoCliLogging();
 
   const [periode, setPeriode] = React.useState({
     startDate: undefined,
     endDate: undefined,
   });
+  const [client, setClient] = React.useState();
+  const [material, setMaterial] = React.useState();
 
-  const recapText = React.useMemo(() => {
-    if (!periode.startDate) {
-      return "Aucun date séléctionné";
-    } else if (periode.startDate && !periode.endDate) {
-      return "Le " + moment(periode.startDate).format("DD MMMM");
-    } else {
-      start = moment(periode.startDate);
-      end = moment(periode.endDate);
-      return `Du ${start.format("DD MMMM")} au ${end.format("DD MMMM")}`;
+  const [periodError, setPeriodError] = React.useState();
+  const [clientError, setClientError] = React.useState();
+  const [materialError, setMaterialError] = React.useState();
+
+  const handleSave = React.useCallback(async () => {
+    setClientError(undefined);
+    setMaterialError(undefined);
+    setPeriodError(undefined);
+
+    let error = false;
+
+    if (!client || !client["id"]) {
+      setPeriodError("Vous devez selectionner un locataire");
+      error = true;
     }
-  }, [periode]);
 
-  const totalPrice = React.useMemo(() => {
-    price = 10;
-    start = moment(periode.startDate);
-    end = moment(periode.endDate);
-
-    if (!periode.startDate) {
-      return 0;
-    } else if (periode.startDate && !periode.endDate) {
-      return price;
-    } else {
-      return (end.diff(start, "days") + 1) * price;
+    if (!material || !material["id"]) {
+      setMaterialError("Vous devez selectionner le materiel à louer");
+      error = true;
     }
-  }, [periode]);
+
+    if (!periode || !periode.startDate) {
+      setPeriodError("Vous devez selectionner une periode de location");
+      error = true;
+    }
+
+    if (error) return;
+
+    const clientId = client["id"];
+    const materialId = material["id"];
+
+    const start = moment(periode.startDate).format();
+    const end = periode.endDate ? moment(periode.endDate).format() : start;
+
+    const { json, ok } = await materialService.rentMaterial(
+      materialId,
+      clientId,
+      start,
+      end
+    );
+
+    if (ok) {
+      console.log("GO BACK");
+
+      navigation.navigate({
+        name: "LocationsList",
+        params: { client: {} },
+        merge: true,
+      });
+    } else {
+      setPeriodError("Cette periode n'est plus disponible");
+    }
+  }, [client, material, periode]);
 
   return (
     <View style={screenStyles.container}>
@@ -50,70 +83,13 @@ const LocationCreateScreen = () => {
         periode={periode}
         setPeriode={setPeriode}
       />
-      {/* <TouchableOpacity style={{ flex: 0 }}>
-        <View
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            backgroundColor: "white",
-            borderColor: "black",
-            marginTop: 2,
-          }}
-        >
-          <Text style={{ fontWeight: "bold" }}>Locataire</Text>
-          <Text style={{ fontSize: 16 }}>Romaric Gauzi</Text>
-        </View>
-      </TouchableOpacity> */}
-      <SelectSearch
-        label="Locataire"
-        fetchData={async () => {
-          return await locationService.fetchAllLocations();
-        }}
-        renderItem={({ item }) => {
-          return <Text>{item["client"]["prenom"]}</Text>;
-        }}
-        keyExtractor={(data) => {
-          return data["id"];
-        }}
-        selectTextBuilder={(data) => "result"}
-        onSelect={({ item }) => {
-          console.log("Log item", item);
-        }}
+      <ClientSelect client={client} setClient={setClient} />
+      <MaterialSelect material={material} setMaterial={setMaterial} />
+      <RecapSection
+        periode={periode}
+        price={material ? material["prixParJour"] : undefined}
+        onSave={handleSave}
       />
-      <TouchableOpacity style={{ flex: 0 }}>
-        <View
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            backgroundColor: "white",
-            borderColor: "black",
-            marginTop: 2,
-          }}
-        >
-          <Text style={{ fontWeight: "bold" }}>Materiel</Text>
-          <Text style={{ fontSize: 16 }}>Raquette</Text>
-        </View>
-      </TouchableOpacity>
-      <View
-        style={{
-          flex: 0,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 10,
-          paddingVertical: 30,
-          backgroundColor: "white",
-          borderColor: "black",
-          marginTop: 2,
-        }}
-      >
-        <View>
-          <Text style={{ fontSize: 16 }}>{recapText}</Text>
-          <Text style={{ fontSize: 20 }}>{totalPrice} €</Text>
-        </View>
-        <View>
-          <Button title="Enregister" />
-        </View>
-      </View>
     </View>
   );
 };

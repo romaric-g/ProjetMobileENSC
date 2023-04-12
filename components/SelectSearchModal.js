@@ -17,7 +17,7 @@ const SelectSearchModal = (props) => {
   const {
     label,
     fetchData,
-    renderItem,
+    toText,
     keyExtractor,
     selectTextBuilder,
     closeModal,
@@ -43,6 +43,16 @@ const SelectSearchModal = (props) => {
     searchData();
   }, [searchText]);
 
+  const filteredData = React.useMemo(() => {
+    if (!searchText || !data) return data;
+
+    return data.filter((item) => {
+      let text = toText({ item });
+      if (text.indexOf(searchText) >= 0) return true;
+      return false;
+    });
+  }, [data, searchText]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -53,56 +63,31 @@ const SelectSearchModal = (props) => {
           maxLength={40}
           onChangeText={setSearchText}
           value={searchText}
-          style={{
-            height: 40,
-            padding: 10,
-            borderRadius: 10,
-            backgroundColor: "#EEE",
-          }}
+          style={styles.searchInput}
         />
         {/*  */}
       </View>
       <View style={styles.results}>
         <FlatList
-          data={data}
+          data={filteredData}
           renderItem={(data) => {
             return (
               <TouchableOpacity
                 onPress={() => {
                   onSelect(data);
+                  closeModal();
                 }}
                 style={styles.resultItem}
               >
-                {renderItem(data)}
+                <Text>{toText(data)}</Text>
               </TouchableOpacity>
             );
           }}
           keyExtractor={keyExtractor}
         />
       </View>
-      <View
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 30,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity
-          onPress={closeModal}
-          style={{
-            height: 60,
-            width: 60,
-            borderRadius: 40,
-            borderWidth: 1,
-            borderColor: "#ddd",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+      <View style={styles.centerBottom}>
+        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
           <Ionicons style={{ flex: 0 }} name={"ios-close"} size={32} />
         </TouchableOpacity>
       </View>
@@ -123,6 +108,31 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderBottomWidth: 1,
     borderColor: "#ddd",
+  },
+  searchInput: {
+    height: 40,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#EEE",
+  },
+  centerBottom: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  closeButton: {
+    height: 60,
+    width: 60,
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
   },
 });
 
