@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import SelectSearchModal from "./SelectSearchModal";
 
 moment.locale("fr");
@@ -16,8 +16,10 @@ moment.locale("fr");
 const SelectSearch = ({
   label,
   fetchData,
-  listItemBuilder,
+  renderItem,
+  keyExtractor,
   selectTextBuilder,
+  onSelect,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedData, setSelectedData] = React.useState();
@@ -28,6 +30,10 @@ const SelectSearch = ({
     }
     return selectTextBuilder(selectedData);
   }, [selectedData, selectTextBuilder]);
+
+  const handleCloseModal = React.useCallback(() => {
+    setModalVisible(false);
+  }, [setModalVisible]);
 
   return (
     <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -51,12 +57,19 @@ const SelectSearch = ({
           setModalVisible(!modalVisible);
         }}
       >
-        <SelectSearchModal
-          label={label}
-          fetchData={fetchData}
-          listItemBuilder={listItemBuilder}
-          selectTextBuilder={selectTextBuilder}
-        />
+        <SafeAreaProvider style={{ backgroundColor: "white" }}>
+          <SafeAreaView>
+            <SelectSearchModal
+              label={label}
+              fetchData={fetchData}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              selectTextBuilder={selectTextBuilder}
+              closeModal={handleCloseModal}
+              onSelect={onSelect}
+            />
+          </SafeAreaView>
+        </SafeAreaProvider>
       </Modal>
     </TouchableOpacity>
   );

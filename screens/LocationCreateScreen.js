@@ -8,6 +8,7 @@ import SelecteurPeriode from "../components/SelecteurPeriode";
 import SelectSearch from "../components/SelectSearch";
 moment.locale("fr");
 
+var i = 1;
 const LocationCreateScreen = () => {
   Logs.enableExpoCliLogging();
 
@@ -68,10 +69,16 @@ const LocationCreateScreen = () => {
         fetchData={async () => {
           return await locationService.fetchAllLocations();
         }}
-        listItemBuilder={(data) => {
-          return <Text>Result</Text>;
+        renderItem={({ item }) => {
+          return <Text>{item["client"]["prenom"]}</Text>;
+        }}
+        keyExtractor={(data) => {
+          return data["id"];
         }}
         selectTextBuilder={(data) => "result"}
+        onSelect={({ item }) => {
+          console.log("Log item", item);
+        }}
       />
       <TouchableOpacity style={{ flex: 0 }}>
         <View
