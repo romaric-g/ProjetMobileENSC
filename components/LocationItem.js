@@ -6,6 +6,8 @@ import Moment from "moment";
 const LocationItem = ({ location }) => {
   const toDateFormat = React.useCallback((dt) => Moment(dt).format("DD MMMM"));
 
+  console.log("LOCS", location);
+
   return (
     <View style={componentStyles.container}>
       <View style={componentStyles.main}>

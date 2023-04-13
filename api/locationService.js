@@ -64,7 +64,7 @@ class LocationService {
       jourFin: location.jourFin,
       materielId: location.materielId,
       clientId: location.clientId,
-      materiel: location.client,
+      materiel: location.materiel,
       client: location.client,
     });
   }

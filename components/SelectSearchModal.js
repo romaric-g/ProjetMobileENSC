@@ -33,8 +33,6 @@ const SelectSearchModal = (props) => {
 
     const data = await fetchData(searchText);
 
-    console.log(data);
-
     setData(data);
     setIsLoading(false);
   }, [searchText]);

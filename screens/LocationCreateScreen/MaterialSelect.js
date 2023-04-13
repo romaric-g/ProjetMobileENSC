@@ -24,7 +24,6 @@ const MaterialSelect = ({ material, setMaterial }) => {
       keyExtractor={(data) => {
         return data["id"];
       }}
-      selectTextBuilder={(data) => "result"}
       onSelect={({ item }) => {
         setMaterial(item);
       }}

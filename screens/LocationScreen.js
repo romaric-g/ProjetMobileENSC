@@ -1,6 +1,13 @@
 import { Logs } from "expo";
 import React from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import locationService from "../api/locationService";
 import LocationItem from "../components/LocationItem";
 
@@ -10,25 +17,33 @@ const LocationScreen = ({ navigation }) => {
   const [locations, setLocations] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
+  const [refresh, setRefresh] = React.useState(false);
 
   const loadLocations = React.useCallback(async () => {
     try {
       const locations = await locationService.fetchAllLocations();
       setLocations(locations);
     } catch (error) {
-      console.log("error ee", error)
+      console.log("error ee", error);
       setError(true);
     }
     setLoading(false);
   }, [setLocations]);
 
+  const refreshLocations = React.useCallback(async () => {
+    try {
+      setRefresh(true);
+      const locations = await locationService.fetchAllLocations();
+      setLocations(locations);
+    } catch (error) {
+      console.log("error", error);
+    }
+    setRefresh(false);
+  });
+
   React.useEffect(() => {
     loadLocations();
   }, []);
-
-
-
-  
 
   if (loading) {
     return <Text>Chargement des locations</Text>;
@@ -42,6 +57,13 @@ const LocationScreen = ({ navigation }) => {
     <View style={screenStyles.container}>
       <FlatList
         data={locations}
+        refreshControl={
+          <RefreshControl
+            colors={["#9Bd35A", "#689F38"]}
+            refreshing={refresh}
+            onRefresh={refreshLocations}
+          />
+        }
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {

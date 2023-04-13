@@ -22,7 +22,6 @@ const ClientSelect = ({ client, setClient }) => {
       keyExtractor={(data) => {
         return data["id"];
       }}
-      selectTextBuilder={(data) => "result"}
       onSelect={({ item }) => {
         setClient(item);
       }}
