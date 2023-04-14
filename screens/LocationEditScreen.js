@@ -7,20 +7,20 @@ import SelecteurPeriode from "../components/SelecteurPeriode";
 import ClientSelect from "./LocationCreateScreen/ClientSelect.js";
 import MaterialSelect from "./LocationCreateScreen/MaterialSelect.js";
 import RecapSection from "./LocationCreateScreen/RecapSection.js";
-import locationService from "../api/locationService";
+import locationService, { Location } from "../api/locationService";
 import materialService from "../api/materialService";
 
 moment.locale("fr");
 
-const LocationEditScreen = ({ navigation }) => {
-  Logs.enableExpoCliLogging();
+const LocationEditScreen = ({ navigation, route }) => {
+  const { location } = route.params;
 
   const [periode, setPeriode] = React.useState({
-    startDate: undefined,
-    endDate: undefined,
+    startDate: moment(location.jourDebut).format(),
+    endDate: moment(location.jourFin).format(),
   });
-  const [client, setClient] = React.useState();
-  const [material, setMaterial] = React.useState();
+  const [client, setClient] = React.useState(location.client);
+  const [material, setMaterial] = React.useState(location.materiel);
 
   const [periodError, setPeriodError] = React.useState();
   const [clientError, setClientError] = React.useState();
@@ -56,11 +56,14 @@ const LocationEditScreen = ({ navigation }) => {
     const start = moment(periode.startDate).format();
     const end = periode.endDate ? moment(periode.endDate).format() : start;
 
-    const { json, ok } = await materialService.rentMaterial(
-      materialId,
-      clientId,
-      start,
-      end
+    const ok = await locationService.editLocationById(
+      location.id,
+      new Location({
+        materielId: materialId,
+        clientId: clientId,
+        jourDebut: start,
+        jourFin: end,
+      })
     );
 
     if (ok) {
@@ -68,8 +71,6 @@ const LocationEditScreen = ({ navigation }) => {
 
       navigation.navigate({
         name: "LocationsList",
-        params: { client: {} },
-        merge: true,
       });
     } else {
       setPeriodError("Cette periode n'est plus disponible");

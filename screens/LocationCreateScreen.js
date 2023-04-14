@@ -7,7 +7,6 @@ import SelecteurPeriode from "../components/SelecteurPeriode";
 import ClientSelect from "./LocationCreateScreen/ClientSelect.js";
 import MaterialSelect from "./LocationCreateScreen/MaterialSelect.js";
 import RecapSection from "./LocationCreateScreen/RecapSection.js";
-import locationService from "../api/locationService";
 import materialService from "../api/materialService";
 
 moment.locale("fr");
@@ -62,13 +61,12 @@ const LocationCreateScreen = ({ navigation }) => {
       start,
       end
     );
+    console.log("JSON", json);
 
     if (ok) {
-      console.log("GO BACK");
-
       navigation.navigate({
         name: "LocationsList",
-        params: { client: {} },
+        params: { newLocationId: json["id"] },
         merge: true,
       });
     } else {

@@ -3,13 +3,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import commonStyles from "../theme/styles";
 import Moment from "moment";
 
-const MaterialItem = ({ material }) => {
-  const toDateFormat = React.useCallback((dt) => Moment(dt).format("DD MMMM"));
-
+const ClientItem = ({ client }) => {
   return (
     <View style={componentStyles.container}>
-      <Text style={componentStyles.name}>{material.nom}</Text>
-      <Text style={componentStyles.price}>{material.prixParJour} € / jour</Text>
+      <Text style={componentStyles.name}>
+        {client.prenom} {client.nom}
+      </Text>
+      <Text style={componentStyles.nbLocations}></Text>
     </View>
   );
 };
@@ -28,9 +28,9 @@ const componentStyles = StyleSheet.create({
     fontWeight: "bold",
     margin: 0,
   },
-  price: {
+  nbLocations: {
     fontSize: 14,
   },
 });
 
-export default MaterialItem;
+export default ClientItem;

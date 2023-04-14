@@ -1,7 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import styles from "../theme/styles";
 import moment from "moment";
+import CircleButton from "../components/CircleButton";
+import locationService from "../api/locationService";
+import SideActionHeader from "../components/SideActionHeader";
+import CircleButtonDanger from "../components/CircleButtonDanger";
 
 const LocationDetailsScreen = ({ navigation, route }) => {
   const { location } = route.params;
@@ -36,11 +41,45 @@ const LocationDetailsScreen = ({ navigation, route }) => {
     }
   }, [location]);
 
+  const handleDelete = React.useCallback(async () => {
+    const deleted = await locationService.deleteLocationById(location.id);
+
+    if (deleted) {
+      navigation.navigate({
+        name: "LocationsList",
+        params: { deletedLocationId: location.id },
+        merge: true,
+      });
+    }
+
+    return deleted;
+  }, [location]);
+
   return (
     <View style={screenStyles.container}>
-      <View style={screenStyles.priceBox}>
-        <Text style={screenStyles.priceText}>+ {prixLocation} €</Text>
-      </View>
+      <SideActionHeader
+        leftAction={
+          <CircleButtonDanger
+            onDelete={handleDelete}
+            alertMessage="Voulez-vous vraiement supprimer cette location ?"
+            iconName="trash"
+          />
+        }
+        rightAction={
+          <CircleButton
+            onPress={() => {
+              navigation.navigate("EditLocation", {
+                location: location,
+              });
+            }}
+            iconName="create"
+          />
+        }
+      >
+        <View style={screenStyles.priceBox}>
+          <Text style={screenStyles.priceText}>+ {prixLocation} €</Text>
+        </View>
+      </SideActionHeader>
       <Text style={styles.pageTitle}>{location.materiel.nom}</Text>
       <Text>{periodLocation}</Text>
 

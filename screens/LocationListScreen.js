@@ -9,9 +9,9 @@ import {
   View,
 } from "react-native";
 import locationService from "../api/locationService";
-import LocationItem from "../components/LocationItem";
+import LocationItem from "./LocationListScreen/LocationItem.js";
 
-const LocationScreen = ({ navigation }) => {
+const LocationListScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
 
   const [locations, setLocations] = React.useState([]);
@@ -45,6 +45,20 @@ const LocationScreen = ({ navigation }) => {
     loadLocations();
   }, []);
 
+  React.useEffect(() => {
+    if (route.params?.deletedLocationId) {
+      setLocations((locations) => [
+        ...locations.filter((m) => m.id != route.params?.deletedLocationId),
+      ]);
+    }
+  }, [route.params?.deletedLocationId, setLocations]);
+
+  React.useEffect(() => {
+    if (route.params?.newLocationId) {
+      refreshLocations();
+    }
+  }, [route.params?.newLocationId]);
+
   if (loading) {
     return <Text>Chargement des locations</Text>;
   }
@@ -64,8 +78,13 @@ const LocationScreen = ({ navigation }) => {
             onRefresh={refreshLocations}
           />
         }
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
+            style={[
+              index % 2 == 0
+                ? { backgroundColor: "#ffffff" }
+                : { backgroundColor: "#f8f8f8" },
+            ]}
             onPress={() => {
               navigation.navigate("DetailsLocation", {
                 location: item,
@@ -87,4 +106,4 @@ const screenStyles = StyleSheet.create({
   },
 });
 
-export default LocationScreen;
+export default LocationListScreen;

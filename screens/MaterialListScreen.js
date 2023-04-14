@@ -6,7 +6,7 @@ import { TouchableOpacity } from "react-native";
 import materialService from "../api/materialService";
 import MaterialItem from "../components/MaterialItem";
 
-const MaterialScreen = ({ navigation, route }) => {
+const MaterialListScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
 
   const [materials, setMaterials] = React.useState([]);
@@ -19,7 +19,7 @@ const MaterialScreen = ({ navigation, route }) => {
       const materials = await materialService.fetchAllMaterials();
       setMaterials(materials);
     } catch (error) {
-        console.log("error", error)
+      console.log("error", error);
       setError(true);
     }
     setLoading(false);
@@ -27,21 +27,35 @@ const MaterialScreen = ({ navigation, route }) => {
 
   const refreshMaterials = React.useCallback(async () => {
     try {
-        setRefresh(true)
-        const materials = await materialService.fetchAllMaterials();
-        setMaterials(materials);
-      } catch (error) {
-        console.log("error", error)
-      }
-      setRefresh(false)
-  })
+      setRefresh(true);
+      const materials = await materialService.fetchAllMaterials();
+      setMaterials(materials);
+    } catch (error) {}
+    setRefresh(false);
+  }, []);
 
   React.useEffect(() => {
     if (route.params?.material) {
-        console.log("new material", route.params?.material)
-        setMaterials(materials => [...materials, route.params?.material])
+      console.log("new material", route.params?.material);
+      setMaterials((materials) => [...materials, route.params?.material]);
     }
   }, [route.params?.material, setMaterials]);
+
+  React.useEffect(() => {
+    if (route.params?.editMaterialId) {
+      refreshMaterials();
+
+      route.params.editMaterialId = undefined;
+    }
+  }, [route.params?.editMaterialId]);
+
+  React.useEffect(() => {
+    if (route.params?.removeMaterialId) {
+      refreshMaterials();
+
+      route.params.removeMaterialId = undefined;
+    }
+  }, [route.params?.removeMaterialId]);
 
   React.useEffect(() => {
     loadMaterials();
@@ -60,14 +74,19 @@ const MaterialScreen = ({ navigation, route }) => {
       <FlatList
         data={materials}
         refreshControl={
-            <RefreshControl
-                colors={["#9Bd35A", "#689F38"]}
-                refreshing={refresh}
-                onRefresh={refreshMaterials} 
-            />
+          <RefreshControl
+            colors={["#9Bd35A", "#689F38"]}
+            refreshing={refresh}
+            onRefresh={refreshMaterials}
+          />
         }
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
+            style={[
+              index % 2 == 0
+                ? { backgroundColor: "#ffffff" }
+                : { backgroundColor: "#f8f8f8" },
+            ]}
             onPress={() => {
               navigation.navigate("DetailsMaterial", {
                 material: item,
@@ -89,4 +108,4 @@ const screenStyles = StyleSheet.create({
   },
 });
 
-export default MaterialScreen;
+export default MaterialListScreen;

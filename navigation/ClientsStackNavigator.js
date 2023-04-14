@@ -1,11 +1,12 @@
-import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { screenOptions } from "../theme/styles";
+import React from "react";
+import { TouchableOpacity } from "react-native";
 import ClientCreateScreen from "../screens/ClientCreateScreen";
 import ClientDetailsScreen from "../screens/ClientDetailsScreen";
+import ClientEditScreen from "../screens/ClientEditScreen";
 import ClientScreen from "../screens/ClientScreen";
-import { TouchableOpacity } from "react-native";
+import { screenOptions } from "../theme/styles";
 
 // Screen stack for settings tab
 const ClientsStack = createNativeStackNavigator();
@@ -33,16 +34,10 @@ const ClientsStackNavigator = ({ navigation }) => {
         }}
       />
       <ClientsStack.Screen name="CreateClient" component={ClientCreateScreen} />
+      <ClientsStack.Screen name="EditClient" component={ClientEditScreen} />
       <ClientsStack.Screen
         name="DetailsClient"
         component={ClientDetailsScreen}
-        options={{
-          headerRight: () => (
-            <TouchableOpacity onPress={() => alert("This is a button!")}>
-              <Ionicons name="create-outline" size={32} color="#fff" />
-            </TouchableOpacity>
-          ),
-        }}
       />
     </ClientsStack.Navigator>
   );

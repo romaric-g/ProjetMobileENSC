@@ -8,6 +8,14 @@ const commonStyles = StyleSheet.create({
   h2: { fontSize: 24, paddingBottom: 10 },
   h3: { fontSize: 20, paddingBottom: 10 },
   text: { fontSize: 18, paddingBottom: 10 },
+  input: {
+    height: 60,
+    marginTop: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    borderColor: "#333",
+  },
 });
 
 // Common stack header options

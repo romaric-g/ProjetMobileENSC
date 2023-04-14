@@ -1,41 +1,40 @@
-import React from "react";
-import { Button, StyleSheet, Text, TextInput } from "react-native";
-import { View } from "react-native";
 import { Logs } from "expo";
 import "moment/locale/fr";
-import commonStyles from "../theme/styles";
+import React from "react";
+import { Button, StyleSheet, View } from "react-native";
 import clientService, { Client } from "../api/clientService";
 import FormInput from "../components/FormInput";
 
-const ClientCreateScreen = ({ navigation }) => {
+const ClientEditScreen = ({ navigation, client }) => {
   Logs.enableExpoCliLogging();
 
-  const [nom, setNom] = React.useState();
-  const [prenom, setPrenom] = React.useState();
-  const [telephone, setTelephone] = React.useState();
-  const [email, setEmail] = React.useState();
-  const [adresse, setAdresse] = React.useState();
+  const [nom, setNom] = React.useState(client.nom);
+  const [prenom, setPrenom] = React.useState(client.prenom);
+  const [telephone, setTelephone] = React.useState(client.telephone);
+  const [email, setEmail] = React.useState(client.email);
+  const [adresse, setAdresse] = React.useState(client.adresse);
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
-  const handleCreateClient = React.useCallback(async () => {
-    const client = new Client({
-      nom: nom,
-      prenom: prenom,
-      telephone: telephone,
-      email: email,
-      adresse: adresse,
-    });
-    console.log("client", client);
+  const handleSaveClient = React.useCallback(async () => {
     setLoading(true);
     try {
-      const newClient = await clientService.postClient(client);
+      const ok = await clientService.editClientById(
+        new Client({
+          nom: nom,
+          prenom: prenom,
+          telephone: telephone,
+          email: email,
+          adresse: adresse,
+        })
+      );
+
+      const client = await clientService.findClientById(client.id);
 
       navigation.navigate({
-        name: "ClientsList",
-        params: { client: clientService.toClient(newClient) },
-        merge: true,
+        name: "ClientDetails",
+        params: { client: client },
       });
 
       return;
@@ -54,7 +53,11 @@ const ClientCreateScreen = ({ navigation }) => {
       <FormInput label="Adresse" value={adresse} setValue={setAdresse} />
 
       <View style={screenStyles.buttonBox}>
-        <Button title="Enregister" onPress={handleCreateClient} />
+        <Button
+          title="Enregister"
+          onPress={handleSaveClient}
+          disabled={loading}
+        />
       </View>
     </View>
   );
@@ -70,4 +73,4 @@ const screenStyles = StyleSheet.create({
   },
 });
 
-export default ClientCreateScreen;
+export default ClientEditScreen;

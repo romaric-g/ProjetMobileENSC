@@ -1,3 +1,4 @@
+import moment from "moment";
 import clientService from "../api/clientService";
 
 const rootEndpoint = "https://ensc321.azurewebsites.net/api";
@@ -21,7 +22,7 @@ export class Location {
 
     console.log("client", client);
 
-    this.client = clientService.toClient(client);
+    this.client = client ? clientService.toClient(client) : undefined;
     this.materiel = materiel;
   }
 }
@@ -33,14 +34,51 @@ class LocationService {
     if (locations == null)
       throw Error("Impossible de recuperer la liste des elements depuis l'API");
 
-    return this.createLocations(locations);
+    return this.toLocations(locations);
   }
 
   async findLocationById(id) {
     const location = await this.fetchFromApi(
       `${rootEndpoint}/LocationApi/${id}`
     );
-    return this.createLocation(location);
+    return this.toLocation(location);
+  }
+
+  async editLocationById(id, location) {
+    console.log("LOCA", location);
+    const body = JSON.stringify({
+      clientId: location.clientId,
+      materialId: location.materielId,
+      jourDebut: location.jourDebut,
+      jourFin: location.jourFin,
+    });
+
+    console.log("BODY", body);
+
+    const response = await fetch(`${rootEndpoint}/LocationApi/${id}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+
+    const ok = response.ok;
+
+    return ok;
+  }
+
+  async deleteLocationById(id) {
+    const response = await fetch(`${rootEndpoint}/LocationApi/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.ok;
   }
 
   async fetchFromApi(query) {
@@ -56,8 +94,7 @@ class LocationService {
     }
   }
 
-  // Create a Cocktail model object from a subset of data fields returned by API
-  createLocation(location) {
+  toLocation(location) {
     return new Location({
       id: location.id,
       jourDebut: location.jourDebut,
@@ -69,10 +106,9 @@ class LocationService {
     });
   }
 
-  // Create a Cocktail model object list from the array returned by API
-  createLocations(locations) {
+  toLocations(locations) {
     return locations.map((location) => {
-      return this.createLocation(location);
+      return this.toLocation(location);
     });
   }
 }

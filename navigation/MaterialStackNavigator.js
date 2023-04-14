@@ -1,11 +1,12 @@
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MaterialScreen from "../screens/MaterialScreen";
+import MaterialListScreen from "../screens/MaterialListScreen";
 import MaterialDetailsScreen from "../screens/MaterialDetailsScreen";
 import { screenOptions } from "../theme/styles";
 import { TouchableOpacity } from "react-native";
 import MaterialCreateScreen from "../screens/MaterialCreateScreen";
+import MaterialEditScreen from "../screens/MaterialEditScreen";
 
 // Screen stack for home tab
 const MaterialStack = createNativeStackNavigator();
@@ -18,7 +19,7 @@ const MaterialStackNavigator = ({ navigation }) => {
     >
       <MaterialStack.Screen
         name="Materials"
-        component={MaterialScreen}
+        component={MaterialListScreen}
         options={{
           title: "Materials",
           headerRight: () => (
@@ -37,15 +38,12 @@ const MaterialStackNavigator = ({ navigation }) => {
         component={MaterialCreateScreen}
       />
       <MaterialStack.Screen
+        name="EditMaterial"
+        component={MaterialEditScreen}
+      />
+      <MaterialStack.Screen
         name="DetailsMaterial"
         component={MaterialDetailsScreen}
-        options={{
-          headerRight: () => (
-            <TouchableOpacity onPress={() => alert("This is a button!")}>
-              <Ionicons name="create-outline" size={32} color="#fff" />
-            </TouchableOpacity>
-          ),
-        }}
       />
     </MaterialStack.Navigator>
   );

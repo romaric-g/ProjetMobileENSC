@@ -15,39 +15,42 @@ import commonStyles from "../theme/styles";
 import materialService, { Material } from "../api/materialService";
 import FormInput from "../components/FormInput";
 
-const MaterialCreateScreen = ({ navigation }) => {
+const MaterialEditScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
 
-  const [name, setName] = React.useState();
-  const [price, setPrice] = React.useState();
+  const { material } = route.params;
+
+  const [name, setName] = React.useState(material.nom);
+  const [price, setPrice] = React.useState(material.prixParJour.toString());
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
-  const handleCreateMaterial = React.useCallback(async () => {
-    const material = new Material({
-      nom: name,
-      prixParJour: Number(price),
-    });
-    console.log("material", material);
+  const handleSaveMaterial = React.useCallback(async () => {
     setLoading(true);
     try {
-      const newMaterial = await materialService.createMaterial(material);
+      console.log("handleSaveMaterial");
+      const ok = await materialService.editMaterialById(
+        material.id,
+        new Material({
+          nom: name,
+          prixParJour: Number(price),
+          masquer: false,
+        })
+      );
 
-      navigation.navigate({
-        name: "Materials",
-        params: { material: materialService.toMaterial(newMaterial) },
-        merge: true,
-      });
-
-      console.log("return back");
-
-      return;
-    } catch (error) {
-      console.log("error", error);
-    }
+      if (ok) {
+        navigation.navigate({
+          name: "Materials",
+          params: { editMaterialId: material.id },
+          merge: true,
+        });
+      } else {
+        console.log("ERROR SAVE");
+      }
+    } catch (error) {}
     setLoading(false);
-  }, [name, price]);
+  }, [name, price, material]);
 
   return (
     <View style={screenStyles.container}>
@@ -59,7 +62,7 @@ const MaterialCreateScreen = ({ navigation }) => {
         keyboardType="numeric"
       />
       <View style={screenStyles.buttonBox}>
-        <Button title="Enregister" onPress={handleCreateMaterial} />
+        <Button title="Enregister" onPress={handleSaveMaterial} />
       </View>
     </View>
   );
@@ -75,4 +78,4 @@ const screenStyles = StyleSheet.create({
   },
 });
 
-export default MaterialCreateScreen;
+export default MaterialEditScreen;

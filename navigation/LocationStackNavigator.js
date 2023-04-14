@@ -1,11 +1,12 @@
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LocationScreen from "../screens/LocationScreen";
+import LocationListScreen from "../screens/LocationListScreen";
 import LocationDetailsScreen from "../screens/LocationDetailsScreen";
 import { screenOptions } from "../theme/styles";
 import { Button, TouchableOpacity } from "react-native";
 import LocationCreateScreen from "../screens/LocationCreateScreen";
+import LocationEditScreen from "../screens/LocationEditScreen";
 
 // Screen stack for home tab
 const LocationStack = createNativeStackNavigator();
@@ -18,7 +19,7 @@ const LocationStackNavigator = ({ navigation }) => {
     >
       <LocationStack.Screen
         name="LocationsList"
-        component={LocationScreen}
+        component={LocationListScreen}
         options={{
           title: "LocationsList",
           headerRight: () => (
@@ -37,15 +38,12 @@ const LocationStackNavigator = ({ navigation }) => {
         component={LocationCreateScreen}
       />
       <LocationStack.Screen
+        name="EditLocation"
+        component={LocationEditScreen}
+      />
+      <LocationStack.Screen
         name="DetailsLocation"
         component={LocationDetailsScreen}
-        options={{
-          headerRight: () => (
-            <TouchableOpacity onPress={() => alert("This is a button!")}>
-              <Ionicons name="create-outline" size={32} color="#fff" />
-            </TouchableOpacity>
-          ),
-        }}
       />
     </LocationStack.Navigator>
   );

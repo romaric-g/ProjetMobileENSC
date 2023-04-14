@@ -63,6 +63,26 @@ class MaterialService {
     return await response.json();
   }
 
+  async editMaterialById(id, material) {
+    const body = JSON.stringify({
+      nom: material.nom,
+      prixParJour: material.prixParJour,
+      masquer: material.masquer,
+    });
+    const response = await fetch(`${rootEndpoint}/MaterielApi/${id}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+
+    const ok = response.ok;
+
+    return ok;
+  }
+
   async rentMaterial(id, clientId, start, end) {
     console.log("RENT", id, clientId, start, end);
     const body = JSON.stringify({
