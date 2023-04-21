@@ -1,9 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import TabNavigator from "./navigation/TabNavigator";
+import { InternetProvider } from "./context/InternetContext";
 
 export default function App() {
-  return <TabNavigator />;
+  return (
+    <InternetProvider>
+      <TabNavigator />
+    </InternetProvider>
+  );
 }
 
 const styles = StyleSheet.create({

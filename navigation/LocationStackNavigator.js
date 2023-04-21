@@ -7,6 +7,7 @@ import { screenOptions } from "../theme/styles";
 import { Button, TouchableOpacity } from "react-native";
 import LocationCreateScreen from "../screens/LocationCreateScreen";
 import LocationEditScreen from "../screens/LocationEditScreen";
+import { Text } from "react-native";
 
 // Screen stack for home tab
 const LocationStack = createNativeStackNavigator();

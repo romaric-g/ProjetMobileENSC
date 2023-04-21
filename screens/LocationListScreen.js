@@ -12,9 +12,12 @@ import {
 import locationService from "../api/locationService";
 import commonStyles from "../theme/styles";
 import LocationItem from "./LocationListScreen/LocationItem.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { InternetContext } from "../context/InternetContext";
+import { cacheDataObject, getCachedDataObject } from "../utils/storage";
 
 const LocationListScreen = ({ navigation, route }) => {
-  Logs.enableExpoCliLogging();
+  const { networkAvailable } = React.useContext(InternetContext);
 
   const [locations, setLocations] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -23,14 +26,26 @@ const LocationListScreen = ({ navigation, route }) => {
 
   const loadLocations = React.useCallback(async () => {
     try {
-      const locations = await locationService.fetchAllLocations();
-      setLocations(locations);
+      if (networkAvailable) {
+        // Chargement des locations via l'API
+        const locations = await locationService.fetchAllLocations();
+        setLocations(locations);
+        await cacheDataObject("locations", locations);
+      } else {
+        // Chargement des locations via le cache
+        const locations = await getCachedDataObject("locations");
+        console.log("cached locations", locations);
+        if (locations === null) {
+          throw "pas de location en cache";
+        }
+        setLocations(locations);
+      }
     } catch (error) {
-      console.log("error ee", error);
       setError(true);
     }
+
     setLoading(false);
-  }, [setLocations]);
+  }, [setLocations, networkAvailable]);
 
   const refreshLocations = React.useCallback(async () => {
     try {
@@ -39,11 +54,11 @@ const LocationListScreen = ({ navigation, route }) => {
       setLocations(locations);
     } catch (error) {}
     setRefresh(false);
-  });
+  }, []);
 
   React.useEffect(() => {
     loadLocations();
-  }, []);
+  }, [networkAvailable]);
 
   // Si une location a été supprimé precedement, on l'a retire de la liste
   React.useEffect(() => {

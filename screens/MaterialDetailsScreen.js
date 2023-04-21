@@ -15,10 +15,14 @@ import locationService from "../api/locationService";
 import LocationClientItem from "./MaterialDetailsScreen/LocationClientItem.js";
 import materialService from "../api/materialService";
 import CircleButtonDanger from "../components/CircleButtonDanger";
-import commonStyles from "../theme/styles";
+import { InternetContext } from "../context/InternetContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getCachedDataObject } from "../utils/storage";
 
 const MaterialDetailsScreen = ({ navigation, route }) => {
   const { material } = route.params;
+
+  const { networkAvailable } = React.useContext(InternetContext);
 
   const [locations, setLocations] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -29,7 +33,6 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
     const locations = await locationService.fetchAllLocations();
 
     return locations.filter((location) => {
-      console.log(location.materielId, material.id);
       return location.materielId ? location.materielId == material.id : false;
     });
   }, [material]);
@@ -37,16 +40,29 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
   const loadLocations = React.useCallback(async () => {
     setLoading(true);
     try {
-      const locations = await fetchLocation();
+      let locations;
+      if (networkAvailable) {
+        // Chargement des locations via l'API
+        locations = await fetchLocation();
+      } else {
+        // Chargement des locations dans le cache
+        locations = await getCachedDataObject("locations");
+        if (locations === null) {
+          throw "pas de location en cache";
+        }
+      }
       setLocations(locations);
     } catch (error) {
-      console.log("error ee", error);
       setError(true);
     }
+
     setLoading(false);
-  }, [fetchLocation]);
+  }, [fetchLocation, networkAvailable]);
 
   const refreshLocations = React.useCallback(async () => {
+    if (!networkAvailable) {
+      return;
+    }
     try {
       setRefresh(true);
       const locations = await fetchLocation();
@@ -55,7 +71,7 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
       console.log("error", error);
     }
     setRefresh(false);
-  }, [fetchLocation]);
+  }, [fetchLocation, networkAvailable]);
 
   React.useEffect(() => {
     loadLocations();
@@ -86,10 +102,6 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
     });
   }, []);
 
-  if (error) {
-    return <Text>Erreur lors du chargement des ressources</Text>;
-  }
-
   return (
     <View>
       <View style={screenStyles.header}>
@@ -119,6 +131,11 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
       {!loading && (!locations || locations.length == 0) && (
         <View style={{ alignItems: "center" }}>
           <Text>Cet objet n'a jamais été loué</Text>
+        </View>
+      )}
+      {error && (
+        <View style={{ alignItems: "center" }}>
+          <Text>Impossible de charger les locations associées</Text>
         </View>
       )}
 
