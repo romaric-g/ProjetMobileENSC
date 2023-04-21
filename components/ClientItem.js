@@ -1,7 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import commonStyles from "../theme/styles";
-import Moment from "moment";
 
 const ClientItem = ({ client }) => {
   return (

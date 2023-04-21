@@ -20,14 +20,24 @@ const SelectSearch = ({
   toText,
   keyExtractor,
   onSelect,
+  error,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [errorShow, setErrorShow] = React.useState(false);
 
   const handleCloseModal = React.useCallback(() => {
     setModalVisible(false);
   }, [setModalVisible]);
 
-  console.log("value", value);
+  React.useEffect(() => {
+    if (error) {
+      setErrorShow(true);
+    }
+  }, [error]);
+
+  React.useEffect(() => {
+    setErrorShow(false);
+  }, [value]);
 
   return (
     <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -41,7 +51,11 @@ const SelectSearch = ({
         }}
       >
         <Text style={{ fontWeight: "bold" }}>{label}</Text>
-        <Text style={{ fontSize: 16 }}>{value}</Text>
+        {errorShow ? (
+          <Text style={{ color: "red", fontSize: 16 }}>{error}</Text>
+        ) : (
+          <Text style={{ fontSize: 16 }}>{value}</Text>
+        )}
       </View>
       <Modal
         animationType="slide"

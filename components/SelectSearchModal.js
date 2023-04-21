@@ -3,6 +3,7 @@ import moment from "moment/moment";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -67,6 +68,7 @@ const SelectSearchModal = (props) => {
         {/*  */}
       </View>
       <View style={styles.results}>
+        {!data && <ActivityIndicator />}
         <FlatList
           data={filteredData}
           renderItem={(data) => {

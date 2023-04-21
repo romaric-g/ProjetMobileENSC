@@ -5,8 +5,8 @@ import { Button, StyleSheet, View } from "react-native";
 import clientService, { Client } from "../api/clientService";
 import FormInput from "../components/FormInput";
 
-const ClientEditScreen = ({ navigation, client }) => {
-  Logs.enableExpoCliLogging();
+const ClientEditScreen = ({ navigation, route }) => {
+  const { client } = route.params;
 
   const [nom, setNom] = React.useState(client.nom);
   const [prenom, setPrenom] = React.useState(client.prenom);
@@ -15,12 +15,33 @@ const ClientEditScreen = ({ navigation, client }) => {
   const [adresse, setAdresse] = React.useState(client.adresse);
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
 
-  const handleSaveClient = React.useCallback(async () => {
+  const [nomError, setNomError] = React.useState(false);
+  const [prenomError, setPrenomError] = React.useState(false);
+
+  const handleSaveClient = async () => {
+    setNomError(undefined);
+    setPrenomError(undefined);
+
+    error = false;
+
+    if (!nom) {
+      setNomError("Vous devez saisir un nom");
+      error = true;
+    }
+    if (!prenom) {
+      setPrenomError("Vous devez saisir un prenom");
+      error = true;
+    }
+
+    if (error) {
+      return;
+    }
+
     setLoading(true);
     try {
       const ok = await clientService.editClientById(
+        client.id,
         new Client({
           nom: nom,
           prenom: prenom,
@@ -30,24 +51,40 @@ const ClientEditScreen = ({ navigation, client }) => {
         })
       );
 
-      const client = await clientService.findClientById(client.id);
+      if (ok) {
+        const newClient = await clientService.findClientById(client.id);
 
-      navigation.navigate({
-        name: "ClientDetails",
-        params: { client: client },
-      });
+        navigation.navigate({
+          name: "DetailsClient",
+          params: { client: newClient },
+        });
 
-      return;
+        return;
+      } else {
+        console.log("edit error ");
+      }
     } catch (error) {
-      console.log("error", error);
+      console.log("ERROR ", error);
     }
     setLoading(false);
-  }, [nom, prenom, telephone, email, adresse]);
+  };
 
   return (
     <View style={screenStyles.container}>
-      <FormInput label="Nom" value={nom} setValue={setNom} />
-      <FormInput label="Prenom" value={prenom} setValue={setPrenom} />
+      <FormInput
+        label="Nom"
+        value={nom}
+        setValue={setNom}
+        error={nomError}
+        setError={setNomError}
+      />
+      <FormInput
+        label="Prenom"
+        value={prenom}
+        setValue={setPrenom}
+        error={prenomError}
+        setError={setPrenomError}
+      />
       <FormInput label="Telephone" value={telephone} setValue={setTelephone} />
       <FormInput label="Email" value={email} setValue={setEmail} />
       <FormInput label="Adresse" value={adresse} setValue={setAdresse} />

@@ -13,6 +13,9 @@ import SideActionHeader from "../components/SideActionHeader";
 import CircleButton from "../components/CircleButton";
 import locationService from "../api/locationService";
 import LocationClientItem from "./MaterialDetailsScreen/LocationClientItem.js";
+import materialService from "../api/materialService";
+import CircleButtonDanger from "../components/CircleButtonDanger";
+import commonStyles from "../theme/styles";
 
 const MaterialDetailsScreen = ({ navigation, route }) => {
   const { material } = route.params;
@@ -58,24 +61,44 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
     loadLocations();
   }, []);
 
-  const handleDelete = React.useCallback(() => {}, []);
+  const handleDelete = React.useCallback(async () => {
+    const deleted = await materialService.deleteMaterialById(material.id);
+
+    if (deleted) {
+      navigation.navigate({
+        name: "Materials",
+        params: { deletedMaterialId: material.id },
+      });
+    }
+
+    return deleted;
+  }, [material]);
 
   const handleEdit = React.useCallback(() => {
-    console.log("Handle Edit");
     navigation.navigate("EditMaterial", {
       material: material,
     });
   }, []);
+
+  const handleShowLocation = React.useCallback((location) => {
+    navigation.navigate("DetailsLocation", {
+      location: location,
+    });
+  }, []);
+
+  if (error) {
+    return <Text>Erreur lors du chargement des ressources</Text>;
+  }
 
   return (
     <View>
       <View style={screenStyles.header}>
         <SideActionHeader
           leftAction={
-            <CircleButton
-              onPress={handleDelete}
+            <CircleButtonDanger
+              onDelete={handleDelete}
               iconName="trash"
-              type="danger"
+              alertMessage="Voulez-vous vraiment supprimer ce materiel ?"
             />
           }
           rightAction={<CircleButton onPress={handleEdit} iconName="create" />}
@@ -90,6 +113,12 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
       {loading && (
         <View>
           <ActivityIndicator size="small" color="#0000ff" />
+        </View>
+      )}
+
+      {!loading && (!locations || locations.length == 0) && (
+        <View style={{ alignItems: "center" }}>
+          <Text>Cet objet n'a jamais été loué</Text>
         </View>
       )}
 
@@ -109,7 +138,7 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
                 ? { backgroundColor: "#ffffff" }
                 : { backgroundColor: "#f8f8f8" },
             ]}
-            onPress={handleEdit}
+            onPress={() => handleShowLocation(item)}
           >
             <LocationClientItem location={item} />
           </TouchableOpacity>

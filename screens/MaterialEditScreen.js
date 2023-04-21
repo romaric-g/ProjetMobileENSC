@@ -24,9 +24,27 @@ const MaterialEditScreen = ({ navigation, route }) => {
   const [price, setPrice] = React.useState(material.prixParJour.toString());
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+
+  const [nameError, setNameError] = React.useState(false);
+  const [priceError, setPriceError] = React.useState(false);
 
   const handleSaveMaterial = React.useCallback(async () => {
+    let error = false;
+
+    if (!name) {
+      setNameError("Vous devez saisir un nom");
+      error = true;
+    }
+
+    if (!price) {
+      setPriceError("Vous devez définir un prix");
+      error = true;
+    }
+
+    if (error) {
+      return;
+    }
+
     setLoading(true);
     try {
       console.log("handleSaveMaterial");
@@ -54,12 +72,20 @@ const MaterialEditScreen = ({ navigation, route }) => {
 
   return (
     <View style={screenStyles.container}>
-      <FormInput label="Nom de l'objet" value={name} setValue={setName} />
+      <FormInput
+        label="Nom de l'objet"
+        value={name}
+        setValue={setName}
+        error={nameError}
+        setError={setNameError}
+      />
       <FormInput
         label="Prix par jour"
         value={price}
         setValue={setPrice}
         keyboardType="numeric"
+        error={priceError}
+        setError={setPriceError}
       />
       <View style={screenStyles.buttonBox}>
         <Button title="Enregister" onPress={handleSaveMaterial} />

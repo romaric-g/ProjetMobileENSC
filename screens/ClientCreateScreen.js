@@ -7,6 +7,9 @@ import commonStyles from "../theme/styles";
 import clientService, { Client } from "../api/clientService";
 import FormInput from "../components/FormInput";
 
+const phoneRegex =
+  /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
 const ClientCreateScreen = ({ navigation }) => {
   Logs.enableExpoCliLogging();
 
@@ -17,9 +20,29 @@ const ClientCreateScreen = ({ navigation }) => {
   const [adresse, setAdresse] = React.useState();
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+
+  const [nomError, setNomError] = React.useState(false);
+  const [prenomError, setPrenomError] = React.useState(false);
 
   const handleCreateClient = React.useCallback(async () => {
+    setNomError(undefined);
+    setPrenomError(undefined);
+
+    error = false;
+
+    if (!nom) {
+      setNomError("Vous devez saisir un nom");
+      error = true;
+    }
+    if (!prenom) {
+      setPrenomError("Vous devez saisir un prenom");
+      error = true;
+    }
+
+    if (error) {
+      return;
+    }
+
     const client = new Client({
       nom: nom,
       prenom: prenom,
@@ -27,7 +50,6 @@ const ClientCreateScreen = ({ navigation }) => {
       email: email,
       adresse: adresse,
     });
-    console.log("client", client);
     setLoading(true);
     try {
       const newClient = await clientService.postClient(client);
@@ -47,8 +69,20 @@ const ClientCreateScreen = ({ navigation }) => {
 
   return (
     <View style={screenStyles.container}>
-      <FormInput label="Nom" value={nom} setValue={setNom} />
-      <FormInput label="Prenom" value={prenom} setValue={setPrenom} />
+      <FormInput
+        label="Nom"
+        value={nom}
+        setValue={setNom}
+        error={nomError}
+        setError={setNomError}
+      />
+      <FormInput
+        label="Prenom"
+        value={prenom}
+        setValue={setPrenom}
+        error={prenomError}
+        setError={setPrenomError}
+      />
       <FormInput label="Telephone" value={telephone} setValue={setTelephone} />
       <FormInput label="Email" value={email} setValue={setEmail} />
       <FormInput label="Adresse" value={adresse} setValue={setAdresse} />

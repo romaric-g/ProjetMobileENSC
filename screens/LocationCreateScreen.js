@@ -33,7 +33,7 @@ const LocationCreateScreen = ({ navigation }) => {
     let error = false;
 
     if (!client || !client["id"]) {
-      setPeriodError("Vous devez selectionner un locataire");
+      setClientError("Vous devez selectionner un locataire");
       error = true;
     }
 
@@ -43,7 +43,7 @@ const LocationCreateScreen = ({ navigation }) => {
     }
 
     if (!periode || !periode.startDate) {
-      setPeriodError("Vous devez selectionner une periode de location");
+      setPeriodError("Vous devez selectionner une periode");
       error = true;
     }
 
@@ -61,7 +61,6 @@ const LocationCreateScreen = ({ navigation }) => {
       start,
       end
     );
-    console.log("JSON", json);
 
     if (ok) {
       navigation.navigate({
@@ -81,10 +80,15 @@ const LocationCreateScreen = ({ navigation }) => {
         periode={periode}
         setPeriode={setPeriode}
       />
-      <ClientSelect client={client} setClient={setClient} />
-      <MaterialSelect material={material} setMaterial={setMaterial} />
+      <ClientSelect client={client} setClient={setClient} error={clientError} />
+      <MaterialSelect
+        material={material}
+        setMaterial={setMaterial}
+        error={materialError}
+      />
       <RecapSection
         periode={periode}
+        periodError={periodError}
         price={material ? material["prixParJour"] : undefined}
         onSave={handleSave}
       />

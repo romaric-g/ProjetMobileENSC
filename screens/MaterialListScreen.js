@@ -1,10 +1,16 @@
 import React from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+} from "react-native";
 import { Text, View } from "react-native";
 import { Logs } from "expo";
 import { TouchableOpacity } from "react-native";
 import materialService from "../api/materialService";
 import MaterialItem from "../components/MaterialItem";
+import commonStyles from "../theme/styles";
 
 const MaterialListScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
@@ -38,6 +44,8 @@ const MaterialListScreen = ({ navigation, route }) => {
     if (route.params?.material) {
       console.log("new material", route.params?.material);
       setMaterials((materials) => [...materials, route.params?.material]);
+
+      delete route.params.material;
     }
   }, [route.params?.material, setMaterials]);
 
@@ -45,9 +53,19 @@ const MaterialListScreen = ({ navigation, route }) => {
     if (route.params?.editMaterialId) {
       refreshMaterials();
 
-      route.params.editMaterialId = undefined;
+      delete route.params.editMaterialId;
     }
   }, [route.params?.editMaterialId]);
+
+  React.useEffect(() => {
+    if (route.params?.deletedMaterialId) {
+      setMaterials((materials) => [
+        ...materials.filter((m) => m.id != route.params?.deletedMaterialId),
+      ]);
+
+      delete route.params.deletedMaterialId;
+    }
+  }, [route.params?.deletedMaterialId, setMaterials]);
 
   React.useEffect(() => {
     if (route.params?.removeMaterialId) {
@@ -62,13 +80,19 @@ const MaterialListScreen = ({ navigation, route }) => {
   }, []);
 
   if (loading) {
-    return <Text>Chargement des items</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <ActivityIndicator />
+      </View>
+    );
   }
-
   if (error) {
-    return <Text>Erreur lors du chargement des ressources</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <Text>Erreur lors du chargement des objets</Text>
+      </View>
+    );
   }
-
   return (
     <View style={screenStyles.container}>
       <FlatList

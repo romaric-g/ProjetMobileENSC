@@ -8,7 +8,7 @@ const toClientDisplay = (item) => {
   return item["prenom"] + " " + item["nom"];
 };
 
-const ClientSelect = ({ client, setClient }) => {
+const ClientSelect = ({ client, setClient, error }) => {
   return (
     <SelectSearch
       label="Locataire"
@@ -25,6 +25,7 @@ const ClientSelect = ({ client, setClient }) => {
       onSelect={({ item }) => {
         setClient(item);
       }}
+      error={error}
     />
   );
 };

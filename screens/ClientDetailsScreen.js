@@ -13,8 +13,11 @@ import InformationBox from "../components/InformationBox";
 import SideActionHeader from "../components/SideActionHeader";
 import CircleButtonDanger from "../components/CircleButtonDanger";
 import CircleButton from "../components/CircleButton";
+import { Logs } from "expo";
 
 const ClientDetailsScreen = ({ navigation, route }) => {
+  Logs.enableExpoCliLogging();
+
   const { client } = route.params;
 
   const [clientDetails, setClientDetails] = React.useState();
@@ -22,6 +25,7 @@ const ClientDetailsScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = React.useState();
 
   const loadDetails = React.useCallback(async () => {
+    setIsLoading(true);
     try {
       const clientDetails = await clientService.findClientById(client.id);
       setClientDetails(clientDetails);
@@ -34,9 +38,6 @@ const ClientDetailsScreen = ({ navigation, route }) => {
 
   const locationCount = React.useMemo(() => {
     if (!clientDetails) return;
-
-    console.log("clientDetails", clientDetails);
-
     return clientDetails.locations.length;
   }, [clientDetails]);
 
@@ -47,8 +48,6 @@ const ClientDetailsScreen = ({ navigation, route }) => {
   const handleDelete = React.useCallback(async () => {
     const deleted = await clientService.deleteClientById(client.id);
 
-    console.log("deleted", deleted);
-
     if (deleted) {
       navigation.navigate({
         name: "ClientsList",
@@ -58,14 +57,14 @@ const ClientDetailsScreen = ({ navigation, route }) => {
     }
 
     return deleted;
-  }, []);
+  }, [client]);
 
   return (
     <View style={screenStyles.container}>
       <SideActionHeader
         leftAction={
           <CircleButtonDanger
-            onPress={handleDelete}
+            onDelete={handleDelete}
             iconName="trash"
             alertMessage="Voulez-vous vraiment supprimer ce client ?"
           />
@@ -88,7 +87,7 @@ const ClientDetailsScreen = ({ navigation, route }) => {
       <Text style={styles.pageTitle}>
         {client.prenom} {client.nom}
       </Text>
-      {locationCount !== undefined ? (
+      {!isLoading ? (
         <Text>{locationCount} locations effectués</Text>
       ) : (
         <ActivityIndicator size="small" color="#0000ff" />

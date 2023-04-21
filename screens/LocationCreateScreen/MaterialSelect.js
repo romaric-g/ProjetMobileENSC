@@ -8,7 +8,7 @@ const toMaterielDisplay = (item) => {
   return item["nom"];
 };
 
-const MaterialSelect = ({ material, setMaterial }) => {
+const MaterialSelect = ({ material, setMaterial, error }) => {
   return (
     <SelectSearch
       label="Materiel"
@@ -27,6 +27,7 @@ const MaterialSelect = ({ material, setMaterial }) => {
       onSelect={({ item }) => {
         setMaterial(item);
       }}
+      error={error}
     />
   );
 };

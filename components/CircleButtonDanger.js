@@ -8,8 +8,12 @@ const CircleButtonDanger = ({ alertMessage, onDelete, iconName }) => {
       {
         text: "Oui, supprimer !",
         onPress: async () => {
-          const deleted = onDelete();
-          if (!deleted) {
+          try {
+            const deleted = await onDelete();
+            if (!deleted) {
+              throw "error";
+            }
+          } catch (error) {
             Alert.alert(
               "Erreur",
               "Une erreur c'est produite lors de la suppression, veuillez réessayer !"

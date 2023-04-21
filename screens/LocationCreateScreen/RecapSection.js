@@ -2,7 +2,9 @@ import moment from "moment";
 import React from "react";
 import { Button, Text, View } from "react-native";
 
-const RecapSection = ({ periode, price, onSave }) => {
+const RecapSection = ({ periode, periodError, price, onSave }) => {
+  const [errorShow, setErrorShow] = React.useState(false);
+
   const recapText = React.useMemo(() => {
     if (!periode.startDate) {
       return "Aucune date séléctionnée";
@@ -30,11 +32,22 @@ const RecapSection = ({ periode, price, onSave }) => {
     }
   }, [periode, price]);
 
+  React.useEffect(() => {
+    if (periodError) {
+      setErrorShow(true);
+    }
+  }, [periodError]);
+
+  React.useEffect(() => {
+    setErrorShow(false);
+  }, [periode]);
+
   return (
     <View
       style={{
         flex: 0,
         flexDirection: "row",
+        flexWrap: "wrap",
         justifyContent: "space-between",
         paddingHorizontal: 10,
         paddingVertical: 30,
@@ -44,7 +57,12 @@ const RecapSection = ({ periode, price, onSave }) => {
       }}
     >
       <View>
-        <Text style={{ fontSize: 16 }}>{recapText}</Text>
+        {errorShow ? (
+          <Text style={{ fontSize: 16, color: "red" }}>{periodError}</Text>
+        ) : (
+          <Text style={{ fontSize: 16 }}>{recapText}</Text>
+        )}
+
         <Text style={{ fontSize: 20 }}>{totalPrice} €</Text>
       </View>
       <View>

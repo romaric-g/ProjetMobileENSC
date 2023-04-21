@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LocationStackNavigator from "./LocationStackNavigator";
 import ClientsStackNavigator from "./ClientsStackNavigator";
 import MaterialStackNavigator from "./MaterialStackNavigator";
+import { Logs } from "expo";
 
 const TabStack = createBottomTabNavigator();
 
@@ -14,6 +15,8 @@ const MATERIAL_STACK = "Materiels";
 const CLIENT_STACK = "Clients";
 
 const TabNavigator = () => {
+  Logs.enableExpoCliLogging();
+
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#f4511e" />

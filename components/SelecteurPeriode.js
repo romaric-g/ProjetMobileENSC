@@ -59,8 +59,6 @@ const getDatesInRange = (startDate, endDate) => {
 
 const SelecteurPeriode = ({ style, periode, setPeriode }) => {
   const onDayPress = (day) => {
-    console.log(day);
-    console.log(periode);
     if (periode.startDate === undefined) {
       setPeriode({
         startDate: day.dateString,

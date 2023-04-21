@@ -67,15 +67,18 @@ const LocationEditScreen = ({ navigation, route }) => {
     );
 
     if (ok) {
-      console.log("GO BACK");
+      const newLocation = await locationService.findLocationById(location.id);
 
       navigation.navigate({
-        name: "LocationsList",
+        name: "DetailsLocation",
+        params: {
+          location: newLocation,
+        },
       });
     } else {
       setPeriodError("Cette periode n'est plus disponible");
     }
-  }, [client, material, periode]);
+  }, [location, material, periode]);
 
   return (
     <View style={screenStyles.container}>

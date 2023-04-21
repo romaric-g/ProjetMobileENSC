@@ -16,8 +16,6 @@ class MaterialService {
   async fetchAllMaterials() {
     const materials = await this.fetchFromApi(`${rootEndpoint}/MaterielApi`);
 
-    console.log(materials);
-
     if (materials == null)
       throw Error("Impossible de recuperer la liste des elements depuis l'API");
 
@@ -37,15 +35,13 @@ class MaterialService {
       const response = await fetch(query);
       // FIXME: JSON parse error when ingredient is not found
       const json = await response.json();
-      console.log("json", json);
       return json;
     } catch (e) {
-      console.log("error on fetching", e);
+      console.log("Error on fetching API : ", e);
     }
   }
 
   async createMaterial(material) {
-    console.log("material", material);
     const body = JSON.stringify({
       nom: material.nom,
       prixParJour: material.prixParJour,
@@ -60,7 +56,26 @@ class MaterialService {
       body: body,
     });
 
-    return await response.json();
+    const ok = response.ok;
+
+    return { json: await response.json(), ok };
+  }
+
+  async deleteMaterialById(id) {
+    try {
+      const response = await fetch(`${rootEndpoint}/MaterielApi/${id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.log("error");
+      return false;
+    }
   }
 
   async editMaterialById(id, material) {
@@ -84,13 +99,11 @@ class MaterialService {
   }
 
   async rentMaterial(id, clientId, start, end) {
-    console.log("RENT", id, clientId, start, end);
     const body = JSON.stringify({
       clientId: clientId,
       jourDebut: start,
       jourFin: end,
     });
-    console.log("BODY", body);
     const response = await fetch(`${rootEndpoint}/MaterielApi/${id}/Louer`, {
       method: "POST",
       headers: {
@@ -102,9 +115,6 @@ class MaterialService {
 
     const ok = response.ok;
     const json = await response.json();
-
-    console.log("RESPONSE JSON", json);
-    console.log("RESPONSE OK", ok);
 
     return { json: await json, ok };
   }

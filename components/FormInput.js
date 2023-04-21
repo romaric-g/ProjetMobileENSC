@@ -1,6 +1,20 @@
+import React from "react";
 import { View, TextInput, Text, StyleSheet } from "react-native";
 
-const FormInput = ({ label = "test", value, setValue, keyboardType }) => {
+const FormInput = ({
+  label = "test",
+  value,
+  setValue,
+  keyboardType,
+  error,
+  setError,
+}) => {
+  React.useEffect(() => {
+    if (setError) {
+      setError(undefined);
+    }
+  }, [value, setError]);
+
   return (
     <View style={screenStyles.container}>
       <Text style={screenStyles.label}>{label}</Text>
@@ -11,6 +25,7 @@ const FormInput = ({ label = "test", value, setValue, keyboardType }) => {
         placeholder={label}
         keyboardType={keyboardType}
       />
+      {error && <Text style={screenStyles.errorMessage}>{error}</Text>}
     </View>
   );
 };
@@ -29,6 +44,9 @@ const screenStyles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderColor: "#666",
+  },
+  errorMessage: {
+    color: "red",
   },
 });
 

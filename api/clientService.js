@@ -24,7 +24,7 @@ class ClientService {
 
       return { json, ok };
     } catch (e) {
-      console.log("error on fetching", e);
+      console.log("Error on fetching API", e);
     }
   }
 
@@ -72,13 +72,14 @@ class ClientService {
 
   async editClientById(id, client) {
     const body = JSON.stringify({
+      id: id,
       nom: client.nom,
       prenom: client.prenom,
       email: client.email,
       telephone: client.telephone,
       adresse: client.adresse,
     });
-    const response = await fetch(`${rootEndpoint}/MaterielApi/${id}`, {
+    const response = await fetch(`${rootEndpoint}/ClientApi/${id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -89,19 +90,27 @@ class ClientService {
 
     const ok = response.ok;
 
+    if (!ok) {
+      throw "error";
+    }
+
     return ok;
   }
 
   async deleteClientById(id) {
-    const response = await fetch(`${rootEndpoint}/ClientApi/${id}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(`${rootEndpoint}/ClientApi/${id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-    return response.ok;
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
   }
 
   toClient(client) {

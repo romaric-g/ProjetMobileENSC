@@ -22,25 +22,45 @@ const MaterialCreateScreen = ({ navigation }) => {
   const [price, setPrice] = React.useState();
 
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+
+  const [nameError, setNameError] = React.useState(false);
+  const [priceError, setPriceError] = React.useState(false);
 
   const handleCreateMaterial = React.useCallback(async () => {
+    setNameError(undefined);
+    setPriceError(undefined);
+
+    let error = false;
+
+    if (!name) {
+      setNameError("Vous devez saisir un nom");
+      error = true;
+    }
+
+    if (!price) {
+      setPriceError("Vous devez définir un prix");
+      error = true;
+    }
+
+    if (error) {
+      return;
+    }
+
     const material = new Material({
       nom: name,
       prixParJour: Number(price),
     });
-    console.log("material", material);
     setLoading(true);
     try {
-      const newMaterial = await materialService.createMaterial(material);
+      const { json, ok } = await materialService.createMaterial(material);
 
-      navigation.navigate({
-        name: "Materials",
-        params: { material: materialService.toMaterial(newMaterial) },
-        merge: true,
-      });
-
-      console.log("return back");
+      if (ok) {
+        navigation.navigate({
+          name: "Materials",
+          params: { material: materialService.toMaterial(json) },
+          merge: true,
+        });
+      }
 
       return;
     } catch (error) {
@@ -51,12 +71,20 @@ const MaterialCreateScreen = ({ navigation }) => {
 
   return (
     <View style={screenStyles.container}>
-      <FormInput label="Nom de l'objet" value={name} setValue={setName} />
+      <FormInput
+        label="Nom de l'objet"
+        value={name}
+        setValue={setName}
+        error={nameError}
+        setError={setNameError}
+      />
       <FormInput
         label="Prix par jour"
         value={price}
         setValue={setPrice}
         keyboardType="numeric"
+        error={priceError}
+        setError={setPriceError}
       />
       <View style={screenStyles.buttonBox}>
         <Button title="Enregister" onPress={handleCreateMaterial} />

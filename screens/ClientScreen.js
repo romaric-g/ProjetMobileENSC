@@ -6,10 +6,12 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Logs } from "expo";
 import clientService, { Client } from "../api/clientService";
 import ClientItem from "../components/ClientItem";
+import commonStyles from "../theme/styles";
 
 const ClientScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
@@ -51,7 +53,6 @@ const ClientScreen = ({ navigation, route }) => {
 
   React.useEffect(() => {
     if (route.params?.client) {
-      console.log("new client", route.params?.client);
       setClients((clients) => [...clients, route.params?.client]);
     }
   }, [route.params?.client, setClients]);
@@ -61,11 +62,19 @@ const ClientScreen = ({ navigation, route }) => {
   }, []);
 
   if (loading) {
-    return <Text>Chargement des items</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <ActivityIndicator />
+      </View>
+    );
   }
 
   if (error) {
-    return <Text>Erreur lors du chargement des ressources</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <Text>Erreur lors du chargement des clients</Text>
+      </View>
+    );
   }
 
   return (

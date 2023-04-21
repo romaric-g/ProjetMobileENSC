@@ -1,6 +1,7 @@
 import { Logs } from "expo";
 import React from "react";
 import {
+  ActivityIndicator,
   FlatList,
   RefreshControl,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
 } from "react-native";
 import locationService from "../api/locationService";
 import LocationItem from "./LocationListScreen/LocationItem.js";
+import commonStyles from "../theme/styles";
 
 const LocationListScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
@@ -60,11 +62,18 @@ const LocationListScreen = ({ navigation, route }) => {
   }, [route.params?.newLocationId]);
 
   if (loading) {
-    return <Text>Chargement des locations</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <ActivityIndicator />
+      </View>
+    );
   }
-
   if (error) {
-    return <Text>Erreur lors du chargement des ressources</Text>;
+    return (
+      <View style={commonStyles.container}>
+        <Text>Erreur lors du chargement des locations</Text>
+      </View>
+    );
   }
 
   return (
