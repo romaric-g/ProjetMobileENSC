@@ -1,7 +1,6 @@
 import React from "react";
 import materialService from "../../api/materialService";
 import SelectSearch from "../../components/SelectSearch";
-import { Text } from "react-native";
 
 const toMaterielDisplay = (item) => {
   if (!item) return null;

@@ -40,15 +40,16 @@ const MaterialListScreen = ({ navigation, route }) => {
     setRefresh(false);
   }, []);
 
+  // Si un nouvelle objet vient d'être supprimé, on le retire de la liste
   React.useEffect(() => {
     if (route.params?.material) {
-      console.log("new material", route.params?.material);
       setMaterials((materials) => [...materials, route.params?.material]);
 
       delete route.params.material;
     }
   }, [route.params?.material, setMaterials]);
 
+  // Si un materiel vient d'être modifier, on actualise la liste
   React.useEffect(() => {
     if (route.params?.editMaterialId) {
       refreshMaterials();

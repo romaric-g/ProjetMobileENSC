@@ -1,8 +1,11 @@
 import React from "react";
 import { View, TextInput, Text, StyleSheet } from "react-native";
 
+/**
+ * Champ de formulaire
+ */
 const FormInput = ({
-  label = "test",
+  label,
   value,
   setValue,
   keyboardType,

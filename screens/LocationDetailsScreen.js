@@ -1,17 +1,16 @@
-import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import styles from "../theme/styles";
 import moment from "moment";
-import CircleButton from "../components/CircleButton";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import locationService from "../api/locationService";
-import SideActionHeader from "../components/SideActionHeader";
+import CircleButton from "../components/CircleButton";
 import CircleButtonDanger from "../components/CircleButtonDanger";
+import SideActionHeader from "../components/SideActionHeader";
+import styles from "../theme/styles";
 
 const LocationDetailsScreen = ({ navigation, route }) => {
   const { location } = route.params;
-  console.log("item", location);
 
+  // Permet de recuper la durée de location en fonction de des dates dé début et fin séléctionnés
   const dureeLocation = React.useMemo(() => {
     if (!location.jourDebut) {
       return 0;
@@ -25,10 +24,12 @@ const LocationDetailsScreen = ({ navigation, route }) => {
     }
   }, [location]);
 
+  // Calcule le prix de la location en fonction de la periode choisit
   const prixLocation = React.useMemo(() => {
     return dureeLocation * location.materiel.prixParJour;
   }, [dureeLocation]);
 
+  // Retourne le texte utilisé en fonction de la periode de location choisi
   const periodLocation = React.useMemo(() => {
     if (!location.jourDebut) {
       return "-";

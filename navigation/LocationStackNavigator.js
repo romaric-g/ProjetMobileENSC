@@ -21,7 +21,7 @@ const LocationStackNavigator = ({ navigation }) => {
         name="LocationsList"
         component={LocationListScreen}
         options={{
-          title: "LocationsList",
+          title: "Locations",
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {

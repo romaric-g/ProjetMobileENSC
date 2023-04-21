@@ -10,8 +10,8 @@ import {
   View,
 } from "react-native";
 import locationService from "../api/locationService";
-import LocationItem from "./LocationListScreen/LocationItem.js";
 import commonStyles from "../theme/styles";
+import LocationItem from "./LocationListScreen/LocationItem.js";
 
 const LocationListScreen = ({ navigation, route }) => {
   Logs.enableExpoCliLogging();
@@ -37,9 +37,7 @@ const LocationListScreen = ({ navigation, route }) => {
       setRefresh(true);
       const locations = await locationService.fetchAllLocations();
       setLocations(locations);
-    } catch (error) {
-      console.log("error", error);
-    }
+    } catch (error) {}
     setRefresh(false);
   });
 
@@ -47,6 +45,7 @@ const LocationListScreen = ({ navigation, route }) => {
     loadLocations();
   }, []);
 
+  // Si une location a été supprimé precedement, on l'a retire de la liste
   React.useEffect(() => {
     if (route.params?.deletedLocationId) {
       setLocations((locations) => [
@@ -55,6 +54,7 @@ const LocationListScreen = ({ navigation, route }) => {
     }
   }, [route.params?.deletedLocationId, setLocations]);
 
+  // Si une location vient d'etre ajouté precedement, on recharge la liste des locations
   React.useEffect(() => {
     if (route.params?.newLocationId) {
       refreshLocations();

@@ -1,14 +1,9 @@
-import React from "react";
-import { Button, StyleSheet, Text, TextInput } from "react-native";
-import { View } from "react-native";
 import { Logs } from "expo";
 import "moment/locale/fr";
-import commonStyles from "../theme/styles";
+import React from "react";
+import { Button, StyleSheet, View } from "react-native";
 import clientService, { Client } from "../api/clientService";
 import FormInput from "../components/FormInput";
-
-const phoneRegex =
-  /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
 const ClientCreateScreen = ({ navigation }) => {
   Logs.enableExpoCliLogging();
@@ -62,7 +57,7 @@ const ClientCreateScreen = ({ navigation }) => {
 
       return;
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
     }
     setLoading(false);
   }, [nom, prenom, telephone, email, adresse]);
@@ -88,7 +83,11 @@ const ClientCreateScreen = ({ navigation }) => {
       <FormInput label="Adresse" value={adresse} setValue={setAdresse} />
 
       <View style={screenStyles.buttonBox}>
-        <Button title="Enregister" onPress={handleCreateClient} />
+        <Button
+          title="Enregister"
+          disabled={loading}
+          onPress={handleCreateClient}
+        />
       </View>
     </View>
   );

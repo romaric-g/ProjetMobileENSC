@@ -1,6 +1,14 @@
 import { Text, View } from "react-native";
 
-const SideActionHeader = ({ leftAction, rightAction, children }) => {
+/**
+ * Ce composant permet d'afficher une action de chaque coté d'un élement
+ */
+
+const SideActionHeader = ({
+  leftAction, // Action affiché à gauche (JSX élement)
+  rightAction, // Action affiché à droite (JSX élement)
+  children, // Le composant qui sera au centre des 2 actions (JSX élement)
+}) => {
   return (
     <View
       style={{

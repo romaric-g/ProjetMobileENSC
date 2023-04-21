@@ -1,11 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import commonStyles from "../theme/styles";
-import Moment from "moment";
+import { StyleSheet, Text, View } from "react-native";
 
 const MaterialItem = ({ material }) => {
-  const toDateFormat = React.useCallback((dt) => Moment(dt).format("DD MMMM"));
-
   return (
     <View style={componentStyles.container}>
       <Text style={componentStyles.name}>{material.nom}</Text>

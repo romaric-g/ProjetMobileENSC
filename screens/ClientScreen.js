@@ -1,15 +1,15 @@
+import { Logs } from "expo";
 import React from "react";
 import {
-  Text,
-  View,
+  ActivityIndicator,
   FlatList,
   RefreshControl,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  ActivityIndicator,
+  View,
 } from "react-native";
-import { Logs } from "expo";
-import clientService, { Client } from "../api/clientService";
+import clientService from "../api/clientService";
 import ClientItem from "../components/ClientItem";
 import commonStyles from "../theme/styles";
 
@@ -26,7 +26,6 @@ const ClientScreen = ({ navigation, route }) => {
       const clients = await clientService.fetchAllClients();
       setClients(clients);
     } catch (error) {
-      console.log("error", error);
       setError(true);
     }
     setLoading(false);

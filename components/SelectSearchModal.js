@@ -42,6 +42,7 @@ const SelectSearchModal = (props) => {
     searchData();
   }, [searchText]);
 
+  // Permet de filter les données selon le texte saisie par l'utilisateur
   const filteredData = React.useMemo(() => {
     if (!searchText || !data) return data;
 

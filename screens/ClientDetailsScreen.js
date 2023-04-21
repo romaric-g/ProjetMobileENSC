@@ -1,23 +1,14 @@
 import React from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import styles from "../theme/styles";
 import clientService from "../api/clientService";
+import CircleButton from "../components/CircleButton";
+import CircleButtonDanger from "../components/CircleButtonDanger";
 import InformationBox from "../components/InformationBox";
 import SideActionHeader from "../components/SideActionHeader";
-import CircleButtonDanger from "../components/CircleButtonDanger";
-import CircleButton from "../components/CircleButton";
-import { Logs } from "expo";
+import styles from "../theme/styles";
 
 const ClientDetailsScreen = ({ navigation, route }) => {
-  Logs.enableExpoCliLogging();
-
   const { client } = route.params;
 
   const [clientDetails, setClientDetails] = React.useState();
@@ -92,6 +83,7 @@ const ClientDetailsScreen = ({ navigation, route }) => {
       ) : (
         <ActivityIndicator size="small" color="#0000ff" />
       )}
+      {isError && <Text>-</Text>}
 
       <View style={screenStyles.detailSection}>
         {client.telephone && (

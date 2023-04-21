@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Moment from "moment";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const LocationClientItem = ({ location }) => {
   const toDateFormat = React.useCallback((dt) => Moment(dt).format("DD MMMM"));

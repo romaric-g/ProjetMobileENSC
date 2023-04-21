@@ -1,17 +1,8 @@
 import React from "react";
-import {
-  ActionSheetIOS,
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Button, StyleSheet } from "react-native";
 import { View } from "react-native";
 import { Logs } from "expo";
 import "moment/locale/fr";
-import commonStyles from "../theme/styles";
 import materialService, { Material } from "../api/materialService";
 import FormInput from "../components/FormInput";
 
@@ -47,7 +38,6 @@ const MaterialEditScreen = ({ navigation, route }) => {
 
     setLoading(true);
     try {
-      console.log("handleSaveMaterial");
       const ok = await materialService.editMaterialById(
         material.id,
         new Material({
@@ -63,8 +53,6 @@ const MaterialEditScreen = ({ navigation, route }) => {
           params: { editMaterialId: material.id },
           merge: true,
         });
-      } else {
-        console.log("ERROR SAVE");
       }
     } catch (error) {}
     setLoading(false);
@@ -88,7 +76,11 @@ const MaterialEditScreen = ({ navigation, route }) => {
         setError={setPriceError}
       />
       <View style={screenStyles.buttonBox}>
-        <Button title="Enregister" onPress={handleSaveMaterial} />
+        <Button
+          title="Enregister"
+          disabled={loading}
+          onPress={handleSaveMaterial}
+        />
       </View>
     </View>
   );

@@ -1,7 +1,6 @@
 import React from "react";
 import clientService from "../../api/clientService";
 import SelectSearch from "../../components/SelectSearch";
-import { Text } from "react-native";
 
 const toClientDisplay = (item) => {
   if (!item) return null;

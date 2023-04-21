@@ -13,14 +13,19 @@ import SelectSearchModal from "./SelectSearchModal";
 
 moment.locale("fr");
 
+/**
+ * Permet de selectionner un item parmis une liste.
+ * Le composant integer une bar de recherche
+ */
+
 const SelectSearch = ({
-  label,
-  value,
-  fetchData,
-  toText,
-  keyExtractor,
-  onSelect,
-  error,
+  label, // Label affiché sur le composant ainsi que dans le titre de la modale
+  value, // Valeur actuelle du champ
+  fetchData, // Function qui est chargé de récupérer la liste des choix possibles
+  toText, // Function chargé de transformé un objet choix en texte
+  keyExtractor, // Function chargé de retourné la clé d'un objet choix
+  onSelect, // Function activé quand l'utilisateur choisit un item parmis la liste dans la modale
+  error, // Erreur affiché, si le champ n'est pas en erreur, ne pas saisir ce champ
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [errorShow, setErrorShow] = React.useState(false);
@@ -29,12 +34,14 @@ const SelectSearch = ({
     setModalVisible(false);
   }, [setModalVisible]);
 
+  // Si l'erreur change, on réaffiche re-rend visible l'erreur
   React.useEffect(() => {
     if (error) {
       setErrorShow(true);
     }
   }, [error]);
 
+  // Un changement de la valeur retire l'affichage de l'erreur
   React.useEffect(() => {
     setErrorShow(false);
   }, [value]);
@@ -65,6 +72,7 @@ const SelectSearch = ({
           setModalVisible(!modalVisible);
         }}
       >
+        {/* Permet d'afficher la modale en fullscreen en gardant la zone de sécurité */}
         <SafeAreaProvider style={{ backgroundColor: "white" }}>
           <SafeAreaView>
             <SelectSearchModal

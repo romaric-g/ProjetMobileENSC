@@ -1,6 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
-const InformationBox = ({ label, children, onTouch }) => {
+/**
+ * Permet d'afficher une section information
+ */
+const InformationBox = ({
+  label, // Label de la section
+  children, // Contenu de la section
+  onTouch, // Function appelé quand la section est cliqué
+}) => {
   return (
     <TouchableOpacity
       style={styles.container}

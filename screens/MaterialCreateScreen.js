@@ -1,17 +1,7 @@
-import React from "react";
-import {
-  ActionSheetIOS,
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import { View } from "react-native";
 import { Logs } from "expo";
 import "moment/locale/fr";
-import commonStyles from "../theme/styles";
+import React from "react";
+import { Button, StyleSheet, View } from "react-native";
 import materialService, { Material } from "../api/materialService";
 import FormInput from "../components/FormInput";
 

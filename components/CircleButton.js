@@ -1,6 +1,9 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+/**
+ * Bouton de forme circulaire avec une icon
+ */
 const CircleButton = ({ onPress, iconName, type = "default" }) => {
   return (
     <TouchableOpacity

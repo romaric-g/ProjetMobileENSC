@@ -1,4 +1,3 @@
-import moment from "moment";
 import clientService from "../api/clientService";
 
 const rootEndpoint = "https://ensc321.azurewebsites.net/api";
@@ -19,8 +18,6 @@ export class Location {
     this.jourFin = jourFin;
     this.materielId = materielId;
     this.clientId = clientId;
-
-    console.log("client", client);
 
     this.client = client ? clientService.toClient(client) : undefined;
     this.materiel = materiel;
@@ -45,15 +42,12 @@ class LocationService {
   }
 
   async editLocationById(id, location) {
-    console.log("LOCA", location);
     const body = JSON.stringify({
       clientId: location.clientId,
       materialId: location.materielId,
       jourDebut: location.jourDebut,
       jourFin: location.jourFin,
     });
-
-    console.log("BODY", body);
 
     const response = await fetch(`${rootEndpoint}/LocationApi/${id}`, {
       method: "PUT",
@@ -87,11 +81,8 @@ class LocationService {
       const response = await fetch(query);
       // FIXME: JSON parse error when ingredient is not found
       const json = await response.json();
-      console.log("json", json);
       return json;
-    } catch (e) {
-      console.log("error on fetching", e);
-    }
+    } catch (e) {}
   }
 
   toLocation(location) {

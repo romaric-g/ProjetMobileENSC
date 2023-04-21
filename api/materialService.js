@@ -36,9 +36,7 @@ class MaterialService {
       // FIXME: JSON parse error when ingredient is not found
       const json = await response.json();
       return json;
-    } catch (e) {
-      console.log("Error on fetching API : ", e);
-    }
+    } catch (e) {}
   }
 
   async createMaterial(material) {
@@ -73,7 +71,6 @@ class MaterialService {
 
       return response.ok;
     } catch (error) {
-      console.log("error");
       return false;
     }
   }

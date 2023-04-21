@@ -1,4 +1,3 @@
-import { Logs } from "expo";
 import "moment/locale/fr";
 import React from "react";
 import { Button, StyleSheet, View } from "react-native";
@@ -60,12 +59,8 @@ const ClientEditScreen = ({ navigation, route }) => {
         });
 
         return;
-      } else {
-        console.log("edit error ");
       }
-    } catch (error) {
-      console.log("ERROR ", error);
-    }
+    } catch (error) {}
     setLoading(false);
   };
 
