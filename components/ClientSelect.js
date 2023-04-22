@@ -1,6 +1,6 @@
 import React from "react";
-import clientService from "../../api/clientService";
-import SelectSearch from "../../components/SelectSearch";
+import clientService from "../api/clientService";
+import SelectSearch from "./SelectSearch";
 
 const toClientDisplay = (item) => {
   if (!item) return null;

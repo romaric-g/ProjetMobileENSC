@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import locationService from "../api/locationService";
 import commonStyles from "../theme/styles";
-import LocationItem from "./LocationListScreen/LocationItem.js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import LocationItem from "../components/LocationItem.js";
 import { InternetContext } from "../context/InternetContext";
 import { cacheDataObject, getCachedDataObject } from "../utils/storage";
 
@@ -34,7 +33,6 @@ const LocationListScreen = ({ navigation, route }) => {
       } else {
         // Chargement des locations via le cache
         const locations = await getCachedDataObject("locations");
-        console.log("cached locations", locations);
         if (locations === null) {
           throw "pas de location en cache";
         }

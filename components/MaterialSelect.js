@@ -1,6 +1,6 @@
 import React from "react";
-import materialService from "../../api/materialService";
-import SelectSearch from "../../components/SelectSearch";
+import materialService from "../api/materialService";
+import SelectSearch from "./SelectSearch";
 
 const toMaterielDisplay = (item) => {
   if (!item) return null;

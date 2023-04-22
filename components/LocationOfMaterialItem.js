@@ -2,7 +2,7 @@ import Moment from "moment";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const LocationClientItem = ({ location }) => {
+const LocationOfMaterialItem = ({ location }) => {
   const toDateFormat = React.useCallback((dt) => Moment(dt).format("DD MMMM"));
 
   return (
@@ -45,4 +45,4 @@ const componentStyles = StyleSheet.create({
   },
 });
 
-export default LocationClientItem;
+export default LocationOfMaterialItem;

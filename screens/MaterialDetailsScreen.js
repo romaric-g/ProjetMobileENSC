@@ -8,15 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import styles from "../theme/styles";
-import SideActionHeader from "../components/SideActionHeader";
-import CircleButton from "../components/CircleButton";
 import locationService from "../api/locationService";
-import LocationClientItem from "./MaterialDetailsScreen/LocationClientItem.js";
 import materialService from "../api/materialService";
+import CircleButton from "../components/CircleButton";
 import CircleButtonDanger from "../components/CircleButtonDanger";
+import LocationOfMaterialItem from "../components/LocationOfMaterialItem";
+import SideActionHeader from "../components/SideActionHeader";
 import { InternetContext } from "../context/InternetContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import styles from "../theme/styles";
 import { getCachedDataObject } from "../utils/storage";
 
 const MaterialDetailsScreen = ({ navigation, route }) => {
@@ -157,7 +156,7 @@ const MaterialDetailsScreen = ({ navigation, route }) => {
             ]}
             onPress={() => handleShowLocation(item)}
           >
-            <LocationClientItem location={item} />
+            <LocationOfMaterialItem location={item} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}

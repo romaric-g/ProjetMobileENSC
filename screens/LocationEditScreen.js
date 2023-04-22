@@ -4,9 +4,9 @@ import moment from "moment/moment";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import SelecteurPeriode from "../components/SelecteurPeriode";
-import ClientSelect from "./LocationCreateScreen/ClientSelect.js";
-import MaterialSelect from "./LocationCreateScreen/MaterialSelect.js";
-import RecapSection from "./LocationCreateScreen/RecapSection.js";
+import ClientSelect from "../components/ClientSelect.js";
+import MaterialSelect from "../components/MaterialSelect.js";
+import RecapSection from "../components/RecapSection.js";
 import locationService, { Location } from "../api/locationService";
 import materialService from "../api/materialService";
 

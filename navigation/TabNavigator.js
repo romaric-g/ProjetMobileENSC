@@ -31,7 +31,7 @@ const TabNavigator = () => {
       console.log("Connection type", state.type);
       console.log("Is connected?", state.isConnected);
 
-      setNetworkAvailable(state.isConnected);
+      setNetworkAvailable(!state.isConnected);
       setIsLoading(false);
     });
 
@@ -39,7 +39,7 @@ const TabNavigator = () => {
       console.log("Connection type", state.type);
       console.log("Is connected?", state.isConnected);
 
-      setNetworkAvailable(state.isConnected);
+      setNetworkAvailable(!state.isConnected);
     });
 
     unsubscribe();
